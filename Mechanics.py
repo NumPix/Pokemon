@@ -192,6 +192,7 @@ class pokemon:
                                ])
         self.HP = self.stats[0]
 
+
     def expGain(self, num: int):
         temp = self.lvl
         if num < self.exp[1] - self.exp[0]:
@@ -242,6 +243,15 @@ class pokemon:
             self.moves[moveId].use(self, target)
         self.pp[moveId] -= 1
 
+def printHP(target: pokemon):
+    if target.HP / target.stats[0] > 0.5:
+        HpCol = [color.GREEN, color.END]
+    if target.HP / target.stats[0] <= 0.5:
+        HpCol = [color.YELLOW, color.END]
+    if target.HP / target.stats[0] <= 0.25:
+        HpCol = [color.RED, color.END]
+    print(f"{data[target.id - 1]['name']['english']} {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}")
+
 def battle(YourTeam, FoesTeam, You, Foe):
 
     yTempStats = list(map(lambda x: x.stats, YourTeam))
@@ -252,15 +262,30 @@ def battle(YourTeam, FoesTeam, You, Foe):
     fNow = FoesTeam[0]
     print(f"{You} send out {yNow.name}!")
     print(f"{Foe} send out {fNow.name}!\n")
-    yHpCol = [color.GREEN, color.END]
-    fHpCol = [color.GREEN, color.END]
     """
     True - You
     False - Foe
     """
     dU = {yNow}
 
-    def yAttack(fNow, yNow, yHpCol, fHpCol, turn, dU):
+    def yCheckFaint():
+        time.sleep(1)
+        print('------------------------------------------')
+        for poke in YourTeam: printHP(poke)
+        print('------------------------------------------\n')
+        print(color.BOLD + 'Choose your next Pokemon!\n' + color.END)
+        chPoke = input().capitalize()
+        while chPoke not in list(
+                map(lambda x: data[x.id - 1]['name']['english'], filter(lambda x: x.status != 'Fainted', YourTeam))):
+            print('------------------------------------------')
+            for poke in YourTeam: printHP(poke)
+            print('------------------------------------------\n')
+            chPoke = input().capitalize()
+        chPoke = YourTeam.index(list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])
+        yNow = YourTeam[chPoke]
+        return yNow
+
+    def yAttack(fNow, yNow, turn, dU):
         print(f"{yNow.name} used {color.BOLD}{chMove.name}{color.END}!")
         yNow.attack(yNow.moves.index(chMove), fNow)
         if fNow.status == "Fainted":
@@ -279,70 +304,35 @@ def battle(YourTeam, FoesTeam, You, Foe):
             except IndexError:
                 pass
 
-        if yNow.HP / yNow.stats[0] > 0.5:
-            yHpCol = [color.GREEN, color.END]
-        if yNow.HP / yNow.stats[0] <= 0.5:
-            yHpCol = [color.YELLOW, color.END]
-        if yNow.HP / yNow.stats[0] <= 0.25:
-            yHpCol = [color.RED, color.END]
-
-        if fNow.HP / fNow.stats[0] > 0.5:
-            fHpCol = [color.GREEN, color.END]
-        if fNow.HP / fNow.stats[0] <= 0.5:
-            fHpCol = [color.YELLOW, color.END]
-        if fNow.HP / fNow.stats[0] <= 0.25:
-            fHpCol = [color.RED, color.END]
-
-        print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted',YourTeam))) + '○ ' * len(list(filter(lambda x: x.status == 'Fainted',YourTeam))))
-        print(
-            f"{data[yNow.id - 1]['name']['english']} {yHpCol[0]}[{'█' * round(yNow.HP / yNow.stats[0] / 0.05) + '░' * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}")
-        print(
-            f"{data[fNow.id - 1]['name']['english']} {fHpCol[0]}[{'█' * round(fNow.HP / fNow.stats[0] / 0.05) + '░' * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}")
-        print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * len(list(filter(lambda x: x.status == 'Fainted', FoesTeam))))
+        print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted',YourTeam))) + '○ '* (6 - len(list(filter(lambda x: x.status != 'Fainted',YourTeam)))))
+        printHP(yNow)
+        printHP(fNow)
+        print('● ' * len(list(filter(lambda x: x.status != 'Fainted',FoesTeam))) + '○ '* (6 - len(list(filter(lambda x: x.status != 'Fainted',FoesTeam)))))
         print("\n==========================================\n")
 
-        return fNow, yNow, yHpCol, fHpCol, turn, dU
+        return fNow, yNow, turn, dU
 
-    def fAttack(fNow, yNow, yHpCol, fHpCol, turn):
+    def fAttack(fNow, yNow, turn):
         chMove = r.randint(0, len(fNow.moves) - 1)
         print(f"{fNow.name} used {color.BOLD}{fNow.moves[chMove].name}{color.END}!")
         fNow.attack(chMove, yNow)
 
-
-        if yNow.HP / yNow.stats[0] > 0.5:
-            yHpCol = [color.GREEN, color.END]
-        if yNow.HP / yNow.stats[0] <= 0.5:
-            yHpCol = [color.YELLOW, color.END]
-        if yNow.HP / yNow.stats[0] <= 0.25:
-            yHpCol = [color.RED, color.END]
-
-        if fNow.HP / fNow.stats[0] > 0.5:
-            fHpCol = [color.GREEN, color.END]
-        if fNow.HP / fNow.stats[0] <= 0.5:
-            fHpCol = [color.YELLOW, color.END]
-        if fNow.HP / fNow.stats[0] <= 0.25:
-            fHpCol = [color.RED, color.END]
-
-        print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * len(
-            list(filter(lambda x: x.status == 'Fainted', YourTeam))))
-        print(
-            f"{data[yNow.id - 1]['name']['english']} {yHpCol[0]}[{'█' * round(yNow.HP / yNow.stats[0] / 0.05) + '░' * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}")
-        print(
-            f"{data[fNow.id - 1]['name']['english']} {fHpCol[0]}[{'█' * round(fNow.HP / fNow.stats[0] / 0.05) + '░' * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}")
-        print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * len(
-            list(filter(lambda x: x.status == 'Fainted', FoesTeam))))
+        print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * (
+                    6 - len(list(filter(lambda x: x.status != 'Fainted', YourTeam)))))
+        printHP(yNow)
+        printHP(fNow)
+        print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * (
+                    6 - len(list(filter(lambda x: x.status != 'Fainted', FoesTeam)))))
         print("\n==========================================\n")
 
-        return fNow, yNow, yHpCol, fHpCol, turn
+        return fNow, yNow, turn
 
-    print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * len(
-        list(filter(lambda x: x.status == 'Fainted', YourTeam))))
-    print(
-        f"{data[yNow.id - 1]['name']['english']} {yHpCol[0]}[{'█' * round(yNow.HP / yNow.stats[0] / 0.05) + '░' * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}")
-    print(
-        f"{data[fNow.id - 1]['name']['english']} {fHpCol[0]}[{'█' * round(fNow.HP / fNow.stats[0] / 0.05) + '░' * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}")
-    print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * len(
-        list(filter(lambda x: x.status == 'Fainted', FoesTeam))))
+    print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * (
+                6 - len(list(filter(lambda x: x.status != 'Fainted', YourTeam)))))
+    printHP(yNow)
+    printHP(fNow)
+    print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * (
+                6 - len(list(filter(lambda x: x.status != 'Fainted', FoesTeam)))))
     print("\n==========================================\n")
 
     while list(filter(lambda x: x.status != "Fainted", YourTeam)) and list(filter(lambda x: x.status != "Fainted", FoesTeam)):
@@ -360,36 +350,36 @@ def battle(YourTeam, FoesTeam, You, Foe):
             chMove = list(filter(lambda x: x.name == chMove, yNow.moves))[0]
             tchMove = chMove
             if yNow.stats[5] >= fNow.stats[5]:
-                fNow, yNow, yHpCol, fHpCol, turn, dU = yAttack(fNow, yNow, yHpCol, fHpCol, turn, dU)
+                fNow, yNow, turn, dU = yAttack(fNow, yNow, turn, dU)
                 if not turn:
                     continue
             else:
                 print("\n==========================================\n")
-                fNow, yNow, yHpCol, fHpCol, turn = fAttack(fNow, yNow, yHpCol, fHpCol, turn)
+                fNow, yNow, turn = fAttack(fNow, yNow, turn)
                 if yNow.status == "Fainted":
                     try:
-                        yNow = list(filter(lambda x: x.status != "Fainted", YourTeam))[0]
+                        yNow = yCheckFaint()
                     except:
                         break
                     dU.add(yNow)
-                    print(f"{You} send out {yNow.name}!")
+                    print(f"\n{You} send out {yNow.name}!")
                     turn = False
                     continue
                 chMove = tchMove
                 time.sleep(1)
-                fNow, yNow, yHpCol, fHpCol, turn, dU = yAttack(fNow, yNow, yHpCol, fHpCol, turn, dU)
+                fNow, yNow, turn, dU = yAttack(fNow, yNow, turn, dU)
                 if not turn:
                     continue
                 turn = not turn
         else:
-            fNow, yNow, yHpCol, fHpCol, turn = fAttack(fNow, yNow, yHpCol, fHpCol, turn)
+            fNow, yNow, turn = fAttack(fNow, yNow, turn)
             if yNow.status == "Fainted":
                 try:
-                    yNow = list(filter(lambda x: x.status != "Fainted", YourTeam))[0]
-                    dU.add(yNow)
+                    yNow = yCheckFaint()
                 except:
                     break
-                print(f"{You} send out {yNow.name}!\n")
+                dU.add(yNow)
+                print(f"\n{You} send out {yNow.name}!\n")
                 turn = False
                 continue
 
