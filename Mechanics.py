@@ -8,38 +8,39 @@ import random as r
 import time
 
 class color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
+    PURPLE = "\033[95m"
+    CYAN = "\033[96m"
+    DARKCYAN = "\033[36m"
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    RED = "\033[91m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+    END = "\033[0m"
 
-data = json.loads(open('pokedata.json', 'r').read())
+data = json.loads(open("pokedata.json", "r").read())
+baseXp = json.loads(open("baseXp.json", "r").read())
 
 typeChart = {
-    'Normal': {'Strength': [], 'Weakness': ['Rock', 'Steel'], 'NoEffect': ['Ghost']},
-    'Fire': {'Strength': ['Grass', 'Steel', 'Ice', 'Bug'], 'Weakness': ['Fire', 'Water', 'Rock', 'Dragon'], 'NoEffect': []},
-    'Water': {'Strength': ['Fire', 'Ground', 'Rock'], 'Weakness': ['Water', 'Grass', 'Dragon'], 'NoEffect': []},
-    'Grass': {'Strength': ['Water', 'Ground', 'Rock'], 'Weakness': ['Fire', 'Grass', 'Dragon', 'Poison', 'Bug', 'Flying', 'Steel'], 'NoEffect': []},
-    'Electric': {'Strength': ['Water', 'Flying'], 'Weakness': ['Electric', 'Grass', 'Dragon'], 'NoEffect': ['Ground']},
-    'Ice': {'Strength': ['Grass', 'Ground', 'Flying', 'Dragon'], 'Weakness': ['Fire', 'Water', 'Ice', 'Steel'], 'NoEffect': []},
-    'Fighting': {'Strength': ['Normal', 'Ice', 'Rock', 'Dark', 'Steel'], 'Weakness': ['Poison', 'Flying', 'Physical', 'Bug', 'Fairy'], 'NoEffect': ['Ghost']},
-    'Poison': {'Strength': ['Grass', 'Fairy'], 'Weakness': ['Poison', 'Ground', 'Rock', 'Ghost'], 'NoEffect': ['Steel']},
-    'Ground': {'Strength': ['Fire', 'Electric', 'Poison', 'Rock', 'Steel'], 'Weakness': ['Grass', 'Bug'], 'NoEffect': ['Flying']},
-    'Flying': {'Strength': ['Grass', 'Fighting', 'Bug'], 'Weakness': ['Electric', 'Rock', 'Steel'], 'NoEffect': []},
-    'Physic': {'Strength': ['Fighting', 'Poison'], 'Weakness': ['Physic', 'Steel'], 'NoEffect': ['Dark']},
-    'Bug': {'Strength': ['Grass', 'Physic', 'Dark'], 'Weakness': ['Fire', 'Fighting', 'Poison', 'Flying', 'Ghost', 'Steel', 'Fairy'], 'NoEffect': []},
-    'Rock': {'Strength': ['Fire', 'Ice', 'Flying', 'Bug'], 'Weakness': ['Fighting', 'Ground', 'Steel'], 'NoEffect': []},
-    'Ghost': {'Strength': ['Physic', 'Ghost'], 'Weakness': ['Dark'], 'NoEffect': ['Normal']},
-    'Dragon': {'Strength': ['Dragon'], 'Weakness': ['Steel'], 'NoEffect': ['Fairy']},
-    'Dark': {'Strength': ['Physic', 'Ghost'], 'Weakness': ['Fighting', 'Dark', 'Fairy'], 'NoEffect': []},
-    'Steel': {'Strength': ['Ice', 'Rock', 'Fairy'], 'Weakness': ['Fire', 'Water', 'Electric', 'Steel'], 'NoEffect': []},
-    'Fairy': {'Strength': ['Fighting', 'Dragon', 'Dark'], 'Weakness': ['Poison', 'Steel'], 'NoEffect': []},
+    "Normal": {"Strength": [], "Weakness": ["Rock", "Steel"], "NoEffect": ["Ghost"]},
+    "Fire": {"Strength": ["Grass", "Steel", "Ice", "Bug"], "Weakness": ["Fire", "Water", "Rock", "Dragon"], "NoEffect": []},
+    "Water": {"Strength": ["Fire", "Ground", "Rock"], "Weakness": ["Water", "Grass", "Dragon"], "NoEffect": []},
+    "Grass": {"Strength": ["Water", "Ground", "Rock"], "Weakness": ["Fire", "Grass", "Dragon", "Poison", "Bug", "Flying", "Steel"], "NoEffect": []},
+    "Electric": {"Strength": ["Water", "Flying"], "Weakness": ["Electric", "Grass", "Dragon"], "NoEffect": ["Ground"]},
+    "Ice": {"Strength": ["Grass", "Ground", "Flying", "Dragon"], "Weakness": ["Fire", "Water", "Ice", "Steel"], "NoEffect": []},
+    "Fighting": {"Strength": ["Normal", "Ice", "Rock", "Dark", "Steel"], "Weakness": ["Poison", "Flying", "Physical", "Bug", "Fairy"], "NoEffect": ["Ghost"]},
+    "Poison": {"Strength": ["Grass", "Fairy"], "Weakness": ["Poison", "Ground", "Rock", "Ghost"], "NoEffect": ["Steel"]},
+    "Ground": {"Strength": ["Fire", "Electric", "Poison", "Rock", "Steel"], "Weakness": ["Grass", "Bug"], "NoEffect": ["Flying"]},
+    "Flying": {"Strength": ["Grass", "Fighting", "Bug"], "Weakness": ["Electric", "Rock", "Steel"], "NoEffect": []},
+    "Physic": {"Strength": ["Fighting", "Poison"], "Weakness": ["Physic", "Steel"], "NoEffect": ["Dark"]},
+    "Bug": {"Strength": ["Grass", "Physic", "Dark"], "Weakness": ["Fire", "Fighting", "Poison", "Flying", "Ghost", "Steel", "Fairy"], "NoEffect": []},
+    "Rock": {"Strength": ["Fire", "Ice", "Flying", "Bug"], "Weakness": ["Fighting", "Ground", "Steel"], "NoEffect": []},
+    "Ghost": {"Strength": ["Physic", "Ghost"], "Weakness": ["Dark"], "NoEffect": ["Normal"]},
+    "Dragon": {"Strength": ["Dragon"], "Weakness": ["Steel"], "NoEffect": ["Fairy"]},
+    "Dark": {"Strength": ["Physic", "Ghost"], "Weakness": ["Fighting", "Dark", "Fairy"], "NoEffect": []},
+    "Steel": {"Strength": ["Ice", "Rock", "Fairy"], "Weakness": ["Fire", "Water", "Electric", "Steel"], "NoEffect": []},
+    "Fairy": {"Strength": ["Fighting", "Dragon", "Dark"], "Weakness": ["Poison", "Steel"], "NoEffect": []},
 }
 
 expFormulas = [
@@ -71,11 +72,11 @@ expFormulas = [
 5 - Fluctuating
 """
 
-natureList = ['Hardy', 'Lonely', 'Adamant', 'Naughty', 'Brave',
-              'Bold', 'Docile', 'Impish', 'Lax', 'Relaxed',
-              'Modest', 'Mild', 'Bashful', 'Rash', 'Quiet',
-              'Calm', 'Gentle', 'Careful', 'Quirky', 'Sassy',
-              'Timid', 'Hasty', 'Jolly', 'Naive', 'Serious']
+natureList = ["Hardy", "Lonely", "Adamant", "Naughty", "Brave",
+              "Bold", "Docile", "Impish", "Lax", "Relaxed",
+              "Modest", "Mild", "Bashful", "Rash", "Quiet",
+              "Calm", "Gentle", "Careful", "Quirky", "Sassy",
+              "Timid", "Hasty", "Jolly", "Naive", "Serious"]
 
 
 class move:
@@ -102,7 +103,7 @@ class move:
                 hit = 1
 
             if hit == 0:
-                print(f'{data[target.id - 1]["name"]["english"]} avoided the attack!')
+                print(f"{data[target.id - 1]['name']['english']} avoided the attack!")
                 return
 
             rand = r.randint(85, 100) / 100
@@ -111,30 +112,30 @@ class move:
             critical = 1.5 if crit else 1
             TypeMult = 1
             for type in target.type:
-                if type in typeChart[self.type]['Strength']: TypeMult *= 2
-                elif type in typeChart[self.type]['Weakness']: TypeMult /= 2
-                elif type in typeChart[self.type]['NoEffect']:
-                    print(color.YELLOW + 'its not effective' + color.END)
+                if type in typeChart[self.type]["Strength"]: TypeMult *= 2
+                elif type in typeChart[self.type]["Weakness"]: TypeMult /= 2
+                elif type in typeChart[self.type]["NoEffect"]:
+                    print(color.YELLOW + "its not effective" + color.END)
                     TypeMult = 0
                     break
 
-            if TypeMult > 1: print(color.YELLOW + 'its very effective!' + color.END)
-            elif TypeMult < 1: print(color.YELLOW + 'its not very effective' + color.END)
+            if TypeMult > 1: print(color.YELLOW + "its very effective!" + color.END)
+            elif TypeMult < 1: print(color.YELLOW + "its not very effective" + color.END)
 
             damage = hit * int((((2 * user.lvl / 5 + 2) * self.power * (user.stats[1] if self.category == 0 else user.stats[3]) / (target.stats[2] if self.category == 0 else target.stats[4]) / 50) + 2) * rand * STAB * critical * TypeMult)
             target.HP -= damage
 
-            print(f'{data[target.id - 1]["name"]["english"]} get {damage} damage!')
+            print(f"{data[target.id - 1]['name']['english']} got {damage} damage!")
             if crit:
-                print(color.RED + 'A critical hit!' + color.END)
+                print(color.RED + "A critical hit!" + color.END)
             if target.HP <= 0:
                 target.HP = 0
-                target.status = 'Fainted'
-                print(color.RED + f'{data[target.id - 1]["name"]["english"]} fainted!' + color.END)
+                target.status = "Fainted"
+                print(color.RED + f"{data[target.id - 1]['name']['english']} fainted!" + color.END)
 
 class pokemon:
     def __init__(self, name: str, moves: [str, str, str, str], gender: int, type: [str], id: int,
-                 lvl: int, expType: int, item: str, status: str = ''):
+                 lvl: int, expType: int, item: str, status: str = ""):
         self.name = name
         self.gender = gender
         self.moves = moves
@@ -164,7 +165,7 @@ class pokemon:
         self.iv = [r.randint(0, 31), r.randint(0, 31), r.randint(0, 31)]
         self.ev = [0, 0, 0, 0, 0, 0]
 
-        self.baseStats = np.array(list(data[self.id - 1]['base'].values()))
+        self.baseStats = np.array(list(data[self.id - 1]["base"].values()))
 
         self.stats = np.array([m.floor(
             0.01 * (2 * self.baseStats[0] + self.iv[0] + m.floor(0.25 * self.ev[0])) * self.lvl) + self.lvl + 5,
@@ -192,6 +193,7 @@ class pokemon:
         self.HP = self.stats[0]
 
     def expGain(self, num: int):
+        temp = self.lvl
         if num < self.exp[1] - self.exp[0]:
             self.exp[0] += num
         else:
@@ -228,6 +230,12 @@ class pokemon:
             self.HP += deltaStats[0]
 
             self.expGain(num - tempExp)
+            if temp < self.lvl:
+                print(color.BOLD + f'{self.name} grew to lvl {self.lvl}!' + color.END)
+                print('\nHP: \t\t+{0} -> {6}\nAttack: \t+{1} -> {7}\nDefence: \t+{2} -> {8}\nSp.Attack: \t+{3} -> {9}\nSp.Defence: +{4} -> {10}\nSpeed: \t\t+{5} -> {11}'.format(*deltaStats, *self.stats))
+
+    def expCalc(self, target, pokemonUsed) -> int:
+        return int(1.5 * target.lvl * int(baseXp[data[target.id]['name']['english']]) / 5 / pokemonUsed * (((2 * target.lvl + 10) / (target.lvl + self.lvl + 10)) ** 2.5))
 
     def attack(self, moveId, target):
         if self.pp[moveId] != 0:
@@ -236,25 +244,37 @@ class pokemon:
 
 def battle(YourTeam, FoesTeam, You, Foe):
 
+    yTempStats = list(map(lambda x: x.stats, YourTeam))
+    fTempStats = list(map(lambda x: x.stats, FoesTeam))
+
     turn = False
     yNow = YourTeam[0]
     fNow = FoesTeam[0]
-    print(f'{You} send out {yNow.name}!')
-    print(f'{Foe} send out {fNow.name}!\n')
+    print(f"{You} send out {yNow.name}!")
+    print(f"{Foe} send out {fNow.name}!\n")
     yHpCol = [color.GREEN, color.END]
     fHpCol = [color.GREEN, color.END]
     """
     True - You
     False - Foe
     """
+    dU = {yNow}
 
-    def yAttack(fNow, yNow, yHpCol, fHpCol, turn):
-        print(f'{yNow.name} used {color.BOLD}{chMove.name}{color.END}!')
+    def yAttack(fNow, yNow, yHpCol, fHpCol, turn, dU):
+        print(f"{yNow.name} used {color.BOLD}{chMove.name}{color.END}!")
         yNow.attack(yNow.moves.index(chMove), fNow)
-        if fNow.status == 'Fainted':
+        if fNow.status == "Fainted":
+            time.sleep(1)
+            for poke in filter(lambda x: x.status != 'Fainted', dU):
+                print('\n------------------------------------------')
+                print(f'{poke.name} got {poke.expCalc(poke, len(dU))} xp!')
+                poke.expGain(poke.expCalc(poke, len(dU)))
+                print('------------------------------------------\n')
+                time.sleep(1)
+            dU = {yNow}
             try:
-                fNow = r.choice(list(filter(lambda x: x.status != 'Fainted', FoesTeam)))
-                print(f'{Foe} send out {fNow.name}!')
+                fNow = r.choice(list(filter(lambda x: x.status != "Fainted", FoesTeam)))
+                print(f"{Foe} send out {fNow.name}!")
                 turn = False
             except IndexError:
                 pass
@@ -273,17 +293,19 @@ def battle(YourTeam, FoesTeam, You, Foe):
         if fNow.HP / fNow.stats[0] <= 0.25:
             fHpCol = [color.RED, color.END]
 
+        print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted',YourTeam))) + '○ ' * len(list(filter(lambda x: x.status == 'Fainted',YourTeam))))
         print(
-            f'\n{data[yNow.id - 1]["name"]["english"]} {yHpCol[0]}[{"█" * round(yNow.HP / yNow.stats[0] / 0.05) + "░" * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}')
+            f"{data[yNow.id - 1]['name']['english']} {yHpCol[0]}[{'█' * round(yNow.HP / yNow.stats[0] / 0.05) + '░' * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}")
         print(
-            f'{data[fNow.id - 1]["name"]["english"]} {fHpCol[0]}[{"█" * round(fNow.HP / fNow.stats[0] / 0.05) + "░" * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}')
-        print('\n==========================================\n')
+            f"{data[fNow.id - 1]['name']['english']} {fHpCol[0]}[{'█' * round(fNow.HP / fNow.stats[0] / 0.05) + '░' * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}")
+        print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * len(list(filter(lambda x: x.status == 'Fainted', FoesTeam))))
+        print("\n==========================================\n")
 
-        return fNow, yNow, yHpCol, fHpCol, turn
+        return fNow, yNow, yHpCol, fHpCol, turn, dU
 
     def fAttack(fNow, yNow, yHpCol, fHpCol, turn):
         chMove = r.randint(0, len(fNow.moves) - 1)
-        print(f'{fNow.name} used {color.BOLD}{fNow.moves[chMove].name}{color.END}!')
+        print(f"{fNow.name} used {color.BOLD}{fNow.moves[chMove].name}{color.END}!")
         fNow.attack(chMove, yNow)
 
 
@@ -301,60 +323,82 @@ def battle(YourTeam, FoesTeam, You, Foe):
         if fNow.HP / fNow.stats[0] <= 0.25:
             fHpCol = [color.RED, color.END]
 
+        print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * len(
+            list(filter(lambda x: x.status == 'Fainted', YourTeam))))
         print(
-            f'\n{data[yNow.id - 1]["name"]["english"]} {yHpCol[0]}[{"█" * round(yNow.HP / yNow.stats[0] / 0.05) + "░" * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}')
+            f"{data[yNow.id - 1]['name']['english']} {yHpCol[0]}[{'█' * round(yNow.HP / yNow.stats[0] / 0.05) + '░' * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}")
         print(
-            f'{data[fNow.id - 1]["name"]["english"]} {fHpCol[0]}[{"█" * round(fNow.HP / fNow.stats[0] / 0.05) + "░" * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}')
-        print('\n==========================================\n')
+            f"{data[fNow.id - 1]['name']['english']} {fHpCol[0]}[{'█' * round(fNow.HP / fNow.stats[0] / 0.05) + '░' * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}")
+        print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * len(
+            list(filter(lambda x: x.status == 'Fainted', FoesTeam))))
+        print("\n==========================================\n")
 
         return fNow, yNow, yHpCol, fHpCol, turn
 
-    print(f'{data[yNow.id - 1]["name"]["english"]} {yHpCol[0]}[{"█" * round(yNow.HP / yNow.stats[0] / 0.05) + "░" * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}')
-    print(f'{data[fNow.id - 1]["name"]["english"]} {fHpCol[0]}[{"█" * round(fNow.HP / fNow.stats[0] / 0.05) + "░" * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}\n')
+    print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * len(
+        list(filter(lambda x: x.status == 'Fainted', YourTeam))))
+    print(
+        f"{data[yNow.id - 1]['name']['english']} {yHpCol[0]}[{'█' * round(yNow.HP / yNow.stats[0] / 0.05) + '░' * (20 - round(yNow.HP / yNow.stats[0] / 0.05))}]{yHpCol[1]} {yNow.HP}/{yNow.stats[0]}")
+    print(
+        f"{data[fNow.id - 1]['name']['english']} {fHpCol[0]}[{'█' * round(fNow.HP / fNow.stats[0] / 0.05) + '░' * (20 - round(fNow.HP / fNow.stats[0] / 0.05))}]{fHpCol[1]} {fNow.HP}/{fNow.stats[0]}")
+    print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * len(
+        list(filter(lambda x: x.status == 'Fainted', FoesTeam))))
+    print("\n==========================================\n")
 
-    while list(filter(lambda x: x.status != 'Fainted', YourTeam)) and list(filter(lambda x: x.status != 'Fainted', FoesTeam)):
+    while list(filter(lambda x: x.status != "Fainted", YourTeam)) and list(filter(lambda x: x.status != "Fainted", FoesTeam)):
         turn = not turn
         time.sleep(1)
         if turn:
-            print(*list(map(lambda x: '•' + x.name + f" [{yNow.pp[yNow.moves.index(x)]}/{x.pp}]", yNow.moves)),
-                  sep='\n',
-                  end='\n\n')
+            print(*list(map(lambda x: "•" + x.name + f" [{yNow.pp[yNow.moves.index(x)]}/{x.pp}]", yNow.moves)),
+                  sep="\n",
+                  end="\n\n")
             chMove = input().capitalize()
             while chMove not in list(map(lambda x: x.name, yNow.moves)):
-                print(*list(map(lambda x: '•' + x.name + f" [{yNow.pp[yNow.moves.index(x)]}/{x.pp}]", yNow.moves)),
-                      sep='\n', end='\n\n')
+                print(*list(map(lambda x: "•" + x.name + f" [{yNow.pp[yNow.moves.index(x)]}/{x.pp}]", yNow.moves)),
+                      sep="\n", end="\n\n")
                 chMove = input().capitalize()
             chMove = list(filter(lambda x: x.name == chMove, yNow.moves))[0]
             tchMove = chMove
             if yNow.stats[5] >= fNow.stats[5]:
-                fNow, yNow, yHpCol, fHpCol, turn = yAttack(fNow, yNow, yHpCol, fHpCol, turn)
+                fNow, yNow, yHpCol, fHpCol, turn, dU = yAttack(fNow, yNow, yHpCol, fHpCol, turn, dU)
+                if not turn:
+                    continue
             else:
-                print('\n==========================================\n')
+                print("\n==========================================\n")
                 fNow, yNow, yHpCol, fHpCol, turn = fAttack(fNow, yNow, yHpCol, fHpCol, turn)
-                if yNow.status == 'Fainted':
+                if yNow.status == "Fainted":
                     try:
-                        yNow = list(filter(lambda x: x.status != 'Fainted', YourTeam))[0]
+                        yNow = list(filter(lambda x: x.status != "Fainted", YourTeam))[0]
                     except:
                         break
-                    print(f'{You} send out {yNow.name}!')
+                    dU.add(yNow)
+                    print(f"{You} send out {yNow.name}!")
                     turn = False
                     continue
                 chMove = tchMove
                 time.sleep(1)
-                fNow, yNow, yHpCol, fHpCol, turn = yAttack(fNow, yNow, yHpCol, fHpCol, turn)
+                fNow, yNow, yHpCol, fHpCol, turn, dU = yAttack(fNow, yNow, yHpCol, fHpCol, turn, dU)
+                if not turn:
+                    continue
                 turn = not turn
         else:
             fNow, yNow, yHpCol, fHpCol, turn = fAttack(fNow, yNow, yHpCol, fHpCol, turn)
-            if yNow.status == 'Fainted':
+            if yNow.status == "Fainted":
                 try:
-                    yNow = list(filter(lambda x: x.status != 'Fainted', YourTeam))[0]
+                    yNow = list(filter(lambda x: x.status != "Fainted", YourTeam))[0]
+                    dU.add(yNow)
                 except:
                     break
-                print(f'{You} send out {yNow.name}!\n')
+                print(f"{You} send out {yNow.name}!\n")
                 turn = False
                 continue
 
-    if list(filter(lambda x: x.status != 'Fainted', YourTeam)):
-        print('You Won!')
+    if list(filter(lambda x: x.status != "Fainted", YourTeam)):
+        print("You Won!")
     else:
-        print('You Lost!')
+        print("You Lost!")
+
+    for i in range(len(YourTeam)):
+        YourTeam[i].stats = yTempStats[i]
+    for i in range(len(FoesTeam)):
+        FoesTeam[i].stats = fTempStats[i]
