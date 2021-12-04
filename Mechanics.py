@@ -33,12 +33,12 @@ typeChart = {
     "Poison": {"Strength": ["Grass", "Fairy"], "Weakness": ["Poison", "Ground", "Rock", "Ghost"], "NoEffect": ["Steel"]},
     "Ground": {"Strength": ["Fire", "Electric", "Poison", "Rock", "Steel"], "Weakness": ["Grass", "Bug"], "NoEffect": ["Flying"]},
     "Flying": {"Strength": ["Grass", "Fighting", "Bug"], "Weakness": ["Electric", "Rock", "Steel"], "NoEffect": []},
-    "Physic": {"Strength": ["Fighting", "Poison"], "Weakness": ["Physic", "Steel"], "NoEffect": ["Dark"]},
-    "Bug": {"Strength": ["Grass", "Physic", "Dark"], "Weakness": ["Fire", "Fighting", "Poison", "Flying", "Ghost", "Steel", "Fairy"], "NoEffect": []},
+    "Psychic": {"Strength": ["Fighting", "Poison"], "Weakness": ["Psychic", "Steel"], "NoEffect": ["Dark"]},
+    "Bug": {"Strength": ["Grass", "Psychic", "Dark"], "Weakness": ["Fire", "Fighting", "Poison", "Flying", "Ghost", "Steel", "Fairy"], "NoEffect": []},
     "Rock": {"Strength": ["Fire", "Ice", "Flying", "Bug"], "Weakness": ["Fighting", "Ground", "Steel"], "NoEffect": []},
-    "Ghost": {"Strength": ["Physic", "Ghost"], "Weakness": ["Dark"], "NoEffect": ["Normal"]},
+    "Ghost": {"Strength": ["Psychic", "Ghost"], "Weakness": ["Dark"], "NoEffect": ["Normal"]},
     "Dragon": {"Strength": ["Dragon"], "Weakness": ["Steel"], "NoEffect": ["Fairy"]},
-    "Dark": {"Strength": ["Physic", "Ghost"], "Weakness": ["Fighting", "Dark", "Fairy"], "NoEffect": []},
+    "Dark": {"Strength": ["Psychic", "Ghost"], "Weakness": ["Fighting", "Dark", "Fairy"], "NoEffect": []},
     "Steel": {"Strength": ["Ice", "Rock", "Fairy"], "Weakness": ["Fire", "Water", "Electric", "Steel"], "NoEffect": []},
     "Fairy": {"Strength": ["Fighting", "Dragon", "Dark"], "Weakness": ["Poison", "Steel"], "NoEffect": []},
 }
@@ -120,7 +120,7 @@ class move:
                     break
 
             if TypeMult > 1: print(color.YELLOW + "its very effective!" + color.END)
-            elif TypeMult < 1: print(color.YELLOW + "its not very effective" + color.END)
+            elif TypeMult < 1 and TypeMult != 0: print(color.YELLOW + "its not very effective" + color.END)
 
             damage = hit * int((((2 * user.lvl / 5 + 2) * self.power * (user.stats[1] if self.category == 0 else user.stats[3]) / (target.stats[2] if self.category == 0 else target.stats[4]) / 50) + 2) * rand * STAB * critical * TypeMult)
             target.HP -= damage
@@ -134,7 +134,7 @@ class move:
                 print(color.RED + f"{data[target.id - 1]['name']['english']} fainted!" + color.END)
 
 class pokemon:
-    def __init__(self, name: str, moves: [str, str, str, str], gender: int, type: [str], id: int,
+    def __init__(self, name: str, moves: [str, str, str, str], gender: int, id: int,
                  lvl: int, expType: int, item: str, status: str = ""):
         self.name = name
         self.gender = gender
@@ -146,7 +146,6 @@ class pokemon:
         self.natureStat[natureList.index(self.nature) % 5] -= 0.1
         self.natureStat[natureList.index(self.nature) // 5] += 0.1
 
-        self.type = type
         """
         HP
         Attack
@@ -156,6 +155,9 @@ class pokemon:
         Speed
         """
         self.id = id
+
+        self.type = data[id - 1]['type']
+
         self.lvl = lvl
         self.exp = [expFormulas[expType](lvl), expFormulas[expType](lvl + 1)]
         self.expType = expType
@@ -250,7 +252,19 @@ def printHP(target: pokemon):
         HpCol = [color.YELLOW, color.END]
     if target.HP / target.stats[0] <= 0.25:
         HpCol = [color.RED, color.END]
-    print(f"{data[target.id - 1]['name']['english']} {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}")
+    print(f"{data[target.id - 1]['name']['english']} {target.lvl} lv. {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}")
+
+def printMove(target: pokemon, Move: move):
+    if target.pp[target.moves.index(Move)] / Move.pp >= 0.5:
+        moveCol = [color.END, color.END]
+    elif target.pp[target.moves.index(Move)] / Move.pp >= 0.25:
+        moveCol = [color.YELLOW, color.END]
+    else:
+        moveCol = [color.RED, color.END]
+
+    print(moveCol[0] + "•" + Move.name + f" [{target.pp[target.moves.index(Move)]}/{Move.pp}]" + moveCol[1])
+
+
 
 def battle(YourTeam, FoesTeam, You, Foe):
 
@@ -299,7 +313,41 @@ def battle(YourTeam, FoesTeam, You, Foe):
             dU = {yNow}
             try:
                 fNow = r.choice(list(filter(lambda x: x.status != "Fainted", FoesTeam)))
+
+                print(color.BOLD + f"{Foe} is going to send out {data[fNow.id - 1]['name']['english']}!" + color.END)
+                print("Do you want to switch pokemon (Y/n)?")
+                switch = False
+                ch = input().lower()
+                while ch not in ['y', 'n', 'yes', 'no', '']:
+                    ch = input()
+                if ch in ['n', 'no', '']: pass
+                else:
+                    switch = True
+                    print(color.BOLD + "Choose a Pokemon to switch!" + color.END)
+                    print('------------------------------------------')
+                    for poke in YourTeam: printHP(poke)
+                    print('------------------------------------------\n')
+                    chPoke = input().capitalize()
+                    back = False
+                    while chPoke not in list(map(lambda x: data[x.id - 1]['name']['english'],
+                                                 filter(lambda x: x.status != 'Fainted', YourTeam))):
+                        if chPoke == '':
+                            back = True
+                            break
+                        print('------------------------------------------')
+                        for poke in YourTeam: printHP(poke)
+                        print('------------------------------------------\n')
+                        chPoke = input().capitalize()
+                    if not back:
+                        chPoke = YourTeam.index(
+                            list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])
+                        yNow = YourTeam[chPoke]
+                    else:
+                        switch = False
+
                 print(f"{Foe} send out {fNow.name}!")
+                if switch:
+                    print(f"{You} send out {yNow.name}!")
                 turn = False
             except IndexError:
                 pass
@@ -337,40 +385,73 @@ def battle(YourTeam, FoesTeam, You, Foe):
 
     while list(filter(lambda x: x.status != "Fainted", YourTeam)) and list(filter(lambda x: x.status != "Fainted", FoesTeam)):
         turn = not turn
-        time.sleep(1)
         if turn:
-            print(*list(map(lambda x: "•" + x.name + f" [{yNow.pp[yNow.moves.index(x)]}/{x.pp}]", yNow.moves)),
-                  sep="\n",
-                  end="\n\n")
-            chMove = input().capitalize()
-            while chMove not in list(map(lambda x: x.name, yNow.moves)):
-                print(*list(map(lambda x: "•" + x.name + f" [{yNow.pp[yNow.moves.index(x)]}/{x.pp}]", yNow.moves)),
-                      sep="\n", end="\n\n")
+            print(*["•Attack", "•Pokemon"], sep = "\n", end="\n\n")
+            opt = input().capitalize()
+            while opt not in ["Attack", "Pokemon"]:
+                print(*["•Attack", "•Pokemon"], sep="\n", end="\n\n")
+                opt = input().capitalize()
+            if opt == "Attack":
+                print('------------------------------------------')
+                for mv in yNow.moves: printMove(yNow, mv)
+                print('------------------------------------------\n')
                 chMove = input().capitalize()
-            chMove = list(filter(lambda x: x.name == chMove, yNow.moves))[0]
-            tchMove = chMove
-            if yNow.stats[5] >= fNow.stats[5]:
-                fNow, yNow, turn, dU = yAttack(fNow, yNow, turn, dU)
-                if not turn:
-                    continue
-            else:
-                print("\n==========================================\n")
-                fNow, yNow, turn = fAttack(fNow, yNow, turn)
-                if yNow.status == "Fainted":
-                    try:
-                        yNow = yCheckFaint()
-                    except:
+                back = False
+                while chMove not in list(map(lambda x: x.name, filter(lambda x: yNow.pp[yNow.moves.index(x)] > 0, yNow.moves))):
+                    if chMove == '':
+                        back = True
                         break
-                    dU.add(yNow)
-                    print(f"\n{You} send out {yNow.name}!")
+                    for mv in yNow.moves: printMove(yNow, mv)
+                    chMove = input().capitalize()
+                if back:
                     turn = False
                     continue
-                chMove = tchMove
-                time.sleep(1)
-                fNow, yNow, turn, dU = yAttack(fNow, yNow, turn, dU)
-                if not turn:
+                chMove = list(filter(lambda x: x.name == chMove, yNow.moves))[0]
+                tchMove = chMove
+                if yNow.stats[5] >= fNow.stats[5]:
+                    fNow, yNow, turn, dU = yAttack(fNow, yNow, turn, dU)
+                    if not turn:
+                        continue
+                else:
+                    print("\n==========================================\n")
+                    fNow, yNow, turn = fAttack(fNow, yNow, turn)
+                    if yNow.status == "Fainted":
+                        try:
+                            yNow = yCheckFaint()
+                        except:
+                            break
+                        dU.add(yNow)
+                        print(f"\n{You} send out {yNow.name}!")
+                        turn = False
+                        continue
+                    chMove = tchMove
+                    time.sleep(1)
+                    fNow, yNow, turn, dU = yAttack(fNow, yNow, turn, dU)
+                    if not turn:
+                        continue
+                    turn = not turn
+            elif opt == "Pokemon":
+                print(color.BOLD + "Choose a Pokemon to switch!" + color.END)
+                print('------------------------------------------')
+                for poke in YourTeam: printHP(poke)
+                print('------------------------------------------\n')
+                chPoke = input().capitalize()
+                back = False
+                while chPoke not in list(map(lambda x: data[x.id - 1]['name']['english'], filter(lambda x: x.status != 'Fainted', YourTeam))):
+                    if chPoke == '':
+                        back = True
+                        break
+                    print('------------------------------------------')
+                    for poke in YourTeam: printHP(poke)
+                    print('------------------------------------------\n')
+                    chPoke = input().capitalize()
+                if back:
+                    turn = False
                     continue
-                turn = not turn
+                chPoke = YourTeam.index(
+                    list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])
+                yNow = YourTeam[chPoke]
+                print(f'{You} send out {yNow.name}!')
         else:
             fNow, yNow, turn = fAttack(fNow, yNow, turn)
             if yNow.status == "Fainted":
