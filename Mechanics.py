@@ -21,6 +21,7 @@ class color:
 
 data = json.loads(open("pokedata.json", "r").read())
 baseXp = json.loads(open("baseXp.json", "r").read())
+itemsData = json.loads(open("items.json", "r").read())
 
 typeChart = {
     "Normal": {"Strength": [], "Weakness": ["Rock", "Steel"], "NoEffect": ["Ghost"]},
@@ -78,6 +79,129 @@ natureList = ["Hardy", "Lonely", "Adamant", "Naughty", "Brave",
               "Calm", "Gentle", "Careful", "Quirky", "Sassy",
               "Timid", "Hasty", "Jolly", "Naive", "Serious"]
 
+healing = ['Potion', 'Super potion', 'Hyper potion', 'Max potion', 'Fresh water', 'Soda pop', 'Lemonade', 'Moomoo milk']
+pprest = ['Ether', 'Max ether', 'Elixir', 'Max elixir']
+
+class item:
+    def __init__(self, name, type: str, id: int):
+        self.name = name
+        self.type = type
+        """
+        Pokeballs
+        HP/PP restore
+        Status restore
+        Battle items
+        """
+        self.id = id
+
+    def use(self, target = None, moveId = None):
+        if self.type == "HP/PP restore":
+            if self.name == "Potion":
+                healed = 20
+                target.HP += healed
+                if target.HP >= target.stats[0]:
+                    print(f'\n{target.name}s HP maxed out!')
+                    target.HP = target.stats[0]
+                else:
+                    print(f'\n{target.name} recovered {healed} HP!')
+            elif self.name == "Super potion":
+                healed = 50
+                target.HP += healed
+                if target.HP >= target.stats[0]:
+                    print(f'\n{target.name}s HP maxed out!')
+                    target.HP = target.stats[0]
+                else:
+                    print(f'\n{target.name} recovered {healed} HP!')
+            elif self.name == "Hyper potion":
+                healed = 200
+                target.HP += healed
+                if target.HP >= target.stats[0]:
+                    print(f'\n{target.name}s HP maxed out!')
+                    target.HP = target.stats[0]
+                else:
+                    print(f'\n{target.name} recovered {healed} HP!')
+            elif self.name == "Max potion":
+                print(f'\n{target.name}s HP maxed out!')
+                target.HP = target.stats[0]
+            elif self.name == "Super potion":
+                healed = 50
+                target.HP += healed
+                if target.HP >= target.stats[0]:
+                    print(f'\n{target.name}s HP maxed out!')
+                    target.HP = target.stats[0]
+                else:
+                    print(f'\n{target.name} recovered {healed} HP!')
+            elif self.name == "Fresh water":
+                healed = 30
+                target.HP += healed
+                if target.HP >= target.stats[0]:
+                    print(f'\n{target.name}s HP maxed out!')
+                    target.HP = target.stats[0]
+                else:
+                    print(f'\n{target.name} recovered {healed} HP!')
+            elif self.name == "Soda pop":
+                healed = 50
+                target.HP += healed
+                if target.HP >= target.stats[0]:
+                    print(f'\n{target.name}s HP maxed out!')
+                    target.HP = target.stats[0]
+                else:
+                    print(f'\n{target.name} recovered {healed} HP!')
+            elif self.name == "Lemonade":
+                healed = 70
+                target.HP += healed
+                if target.HP >= target.stats[0]:
+                    print(f'\n{target.name}s HP maxed out!')
+                    target.HP = target.stats[0]
+                else:
+                    print(f'\n{target.name} recovered {healed} HP!')
+            elif self.name == "Full restore":
+                print(f'\n{target.name}s HP maxed out!')
+                target.HP = target.stats[0]
+                target.status = ''
+            elif self.name == "Elixir":
+                maxpp = [move.pp for move in target.moves]
+                for mv in range(4):
+                    target.pp[mv] += 10
+                    if target.pp[mv] > maxpp[mv]:
+                        target.pp[mv] = maxpp[mv]
+                if target.pp == [move.pp for move in target.moves]:
+                    print(f'\n{target.name}s pp were fully restored')
+                else:
+                    print(f'\n{target.name}s pp were restored')
+            elif self.name == "Max Elixir":
+                target.pp = [move.pp for move in target.moves]
+                print(f'\n{target.name}s pp were fully restored')
+            elif self.name == "Ether":
+                target.pp[moveId] += 10
+                if target.pp[moveId] > target.moves[moveId].pp:
+                    target.pp[moveId] = target.moves[moveId].pp
+                    print(f'\n{target.name}s {target.moves[moveId].name} pp were fully restored')
+                else:
+                    print(f'\n{target.name}s {target.moves[moveId].name} pp were restored')
+            elif self.name == "Max Ether":
+                target.pp[moveId] = target.moves[moveId].pp
+                print(f'\n{target.name}s {target.moves[moveId].name} pp were fully restored')
+        elif self.type == "Status restore":
+            if self.name == 'Revive':
+                target.status = ''
+                target.HP = target.stats[0] // 2
+                print(f'\n{target.name} was revived')
+            elif self.name == 'Max revive':
+                target.status = ''
+                target.HP = target.stats[0]
+                print(f'\n{target.name} was revived')
+            elif self.name == 'Revival herb':
+                target.status = ''
+                target.HP = target.stats[0]
+                print(f'\n{target.name} was revived')
+        elif self.type == 2:
+            pass
+        elif self.type == 3:
+            pass
+        else:
+            return
+        print("\n==========================================\n")
 
 class move:
     def __init__(self, name: str, type: [str], category: int, pp: int, power: Union[int, None], accuracy: Union[float, None], times=1):
@@ -135,7 +259,7 @@ class move:
 
 class pokemon:
     def __init__(self, name: str, moves: [str, str, str, str], gender: int, id: int,
-                 lvl: int, expType: int, item: str, status: str = ""):
+                 lvl: int, expType: int, item: item = None, status: str = ''):
         self.name = name
         self.gender = gender
         self.moves = moves
@@ -252,7 +376,22 @@ def printHP(target: pokemon):
         HpCol = [color.YELLOW, color.END]
     if target.HP / target.stats[0] <= 0.25:
         HpCol = [color.RED, color.END]
-    print(f"{data[target.id - 1]['name']['english']} {target.lvl} lv. {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}")
+
+    status = ''
+    if target.status == 'Fainted':
+        status = '|' + color.RED + target.status + color.END + '|'
+    elif target.status == 'Paralyzed':
+        status = '|' + color.YELLOW + target.status + color.END + '|'
+    elif target.status == 'Poisoned':
+        status = '|' + color.PURPLE + target.status + color.END + '|'
+    elif target.status == 'Sleeping':
+        status = '|' + color.BOLD + target.status + color.END + '|'
+    elif target.status == 'Frozen':
+        status = '|' + color.BLUE + target.status + color.END + '|'
+    elif target.status == 'Burned':
+        status = '|' + color.RED + target.status + color.END + '|'
+
+    print(f"{data[target.id - 1]['name']['english']} {target.lvl} lv. {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]} {status}")
 
 def printMove(target: pokemon, Move: move):
     if target.pp[target.moves.index(Move)] / Move.pp >= 0.5:
@@ -264,9 +403,7 @@ def printMove(target: pokemon, Move: move):
 
     print(moveCol[0] + "•" + Move.name + f" [{target.pp[target.moves.index(Move)]}/{Move.pp}]" + moveCol[1])
 
-
-
-def battle(YourTeam, FoesTeam, You, Foe):
+def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
 
     yTempStats = list(map(lambda x: x.stats, YourTeam))
     fTempStats = list(map(lambda x: x.stats, FoesTeam))
@@ -304,6 +441,7 @@ def battle(YourTeam, FoesTeam, You, Foe):
         yNow.attack(yNow.moves.index(chMove), fNow)
         if fNow.status == "Fainted":
             time.sleep(1)
+
             for poke in filter(lambda x: x.status != 'Fainted', dU):
                 print('\n------------------------------------------')
                 print(f'{poke.name} got {poke.expCalc(poke, len(dU))} xp!')
@@ -386,11 +524,12 @@ def battle(YourTeam, FoesTeam, You, Foe):
     while list(filter(lambda x: x.status != "Fainted", YourTeam)) and list(filter(lambda x: x.status != "Fainted", FoesTeam)):
         turn = not turn
         if turn:
-            print(*["•Attack", "•Pokemon"], sep = "\n", end="\n\n")
+            print(*["•Attack", "•Pokemon", "•Bag"], sep = "\n", end="\n\n")
             opt = input().capitalize()
-            while opt not in ["Attack", "Pokemon"]:
-                print(*["•Attack", "•Pokemon"], sep="\n", end="\n\n")
+            while opt not in ["Attack", "Pokemon", "Bag"]:
+                print(*["•Attack", "•Pokemon", "•Bag"], sep="\n", end="\n\n")
                 opt = input().capitalize()
+
             if opt == "Attack":
                 print('------------------------------------------')
                 for mv in yNow.moves: printMove(yNow, mv)
@@ -430,6 +569,7 @@ def battle(YourTeam, FoesTeam, You, Foe):
                     if not turn:
                         continue
                     turn = not turn
+
             elif opt == "Pokemon":
                 print(color.BOLD + "Choose a Pokemon to switch!" + color.END)
                 print('------------------------------------------')
@@ -451,7 +591,125 @@ def battle(YourTeam, FoesTeam, You, Foe):
                 chPoke = YourTeam.index(
                     list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])
                 yNow = YourTeam[chPoke]
+                dU.add(yNow)
                 print(f'{You} send out {yNow.name}!')
+
+            elif opt == "Bag":
+                print()
+                for elem in Items: print("•" + elem)
+                print()
+                back = False
+                chCat = input().lower()
+                while chCat not in Items:
+                    if chCat == '':
+                        back = True
+                        break
+                    print()
+                    for elem in Items: print("•" + elem)
+                    print()
+                    chCat = input().lower()
+                if back:
+                    turn = False
+                    continue
+
+                print('------------------------------------------')
+                for it in Items[chCat]: print(f'{it.name}\t({Items[chCat][it]})')
+                print('------------------------------------------')
+                chIt = input().capitalize()
+                if chIt == '':
+                    back = True
+                while chIt not in list(map(lambda x: x.name, Items[chCat].keys())):
+                    if chIt == '':
+                        back = True
+                        break
+                    print('------------------------------------------')
+                    for it in Items[chCat]: print(f'{it.name}\t({Items[chCat][it]})')
+                    print('------------------------------------------')
+                    chIt = input().capitalize()
+                if back:
+                    turn = False
+                    continue
+                if chCat == "pokeballs":
+                    list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use()
+                else:
+                    print()
+                    print(color.BOLD + f'use {chIt} on which pokemon?' + color.END)
+                    print()
+                    print('------------------------------------------')
+                    for poke in YourTeam: printHP(poke)
+                    print('------------------------------------------\n')
+                    chPoke = input().capitalize()
+                    back = False
+                    while chPoke not in list(map(lambda x: data[x.id - 1]['name']['english'], YourTeam)):
+                        if chPoke == '':
+                            back = True
+                            break
+                        print('------------------------------------------')
+                        for poke in YourTeam: printHP(poke)
+                        print('------------------------------------------\n')
+                        chPoke = input().capitalize()
+                    if back:
+                        turn = False
+                        continue
+                    chPoke = YourTeam[YourTeam.index(list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])]
+                    if chIt in healing:
+                        if chPoke.HP == chPoke.stats[0] and chIt in healing:
+                            print('\nThere is no effect\n')
+                            turn = False
+                            continue
+                        else:
+                            list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke)
+                            Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
+                            if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
+                                Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
+                    elif chIt in pprest:
+                        if chIt in ['Elixir', 'Max elixir'] and chPoke.pp == [move.pp for move in chPoke.moves]:
+                            print('\nThere is no effect\n')
+                            turn = False
+                            continue
+                        elif chIt in ['Elixir', 'Max elixir'] and chPoke.pp != [move.pp for move in chPoke.moves]:
+                            list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke)
+                            Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
+                            if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
+                                Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
+                        elif chIt in ['Ether', 'Max ether']:
+                            print()
+                            print(color.BOLD + f'which move pp should be restored?' + color.END)
+                            print()
+                            print('------------------------------------------')
+                            for mv in chPoke.moves: printMove(chPoke, mv)
+                            print('------------------------------------------\n')
+                            chMove = input().capitalize()
+                            back = False
+                            while chMove not in list(map(lambda x: x.name, chPoke.moves)):
+                                if chMove == '':
+                                    back = True
+                                    break
+                                for mv in chPoke.moves: printMove(chPoke, mv)
+                                chMove = input().capitalize()
+                            if back:
+                                turn = False
+                                continue
+                            chMove = chPoke.moves.index(list(filter(lambda x: x.name == chMove, chPoke.moves))[0])
+                            if chPoke.moves[chMove].pp == chPoke.pp[chMove]:
+                                print('\nThere is no effect\n')
+                                turn = False
+                                continue
+                            else:
+                                list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke, moveId=chMove)
+                                Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
+                                if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
+                                    Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
+                    elif chIt in map(lambda x: x.name, Items["status restore"].keys()):
+                        if chPoke.status == '':
+                            print("There is no effect")
+                            continue
+                        elif chPoke.status == 'Fainted' and chIt in ['Revive', 'Max revive', 'Revival herb']:
+                            list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke)
+                            Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
+                            if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
+                                Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
+
         else:
             fNow, yNow, turn = fAttack(fNow, yNow, turn)
             if yNow.status == "Fainted":
