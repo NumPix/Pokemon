@@ -64,18 +64,21 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
     def yCheckFaint():
         time.sleep(1)
         print('------------------------------------------')
-        for poke in YourTeam: printHP(poke)
+        for i in range(len(YourTeam)):
+            print(f'({i}) ', end='')
+            printHP(YourTeam[i])
         print('------------------------------------------\n')
         print(color.BOLD + 'Choose your next Pokemon!\n' + color.END)
-        chPoke = input().capitalize()
-        while chPoke not in list(
-                map(lambda x: data[x.id - 1]['name']['english'], filter(lambda x: x.status != 'Fainted', YourTeam))):
+        chPoke = input()
+        while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or \
+                YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
             print('------------------------------------------')
-            for poke in YourTeam: printHP(poke)
+            for i in range(len(YourTeam)):
+                print(f'({i}) ', end='')
+                printHP(YourTeam[i])
             print('------------------------------------------\n')
-            chPoke = input().capitalize()
-        chPoke = YourTeam.index(list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])
-        yNow = YourTeam[chPoke]
+            chPoke = input()
+        yNow = YourTeam[int(chPoke)]
         return yNow
 
     def yAttack(fNow, yNow, turn, dU):
@@ -105,23 +108,25 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     switch = True
                     print(color.BOLD + "Choose a Pokemon to switch!" + color.END)
                     print('------------------------------------------')
-                    for poke in YourTeam: printHP(poke)
+                    for i in range(len(YourTeam)):
+                        print(f'({i}) ', end='')
+                        printHP(YourTeam[i])
                     print('------------------------------------------\n')
-                    chPoke = input().capitalize()
+                    chPoke = input()
                     back = False
-                    while chPoke not in list(map(lambda x: data[x.id - 1]['name']['english'],
-                                                 filter(lambda x: x.status != 'Fainted', YourTeam))):
+                    while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or \
+                            YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
                         if chPoke == '':
                             back = True
                             break
                         print('------------------------------------------')
-                        for poke in YourTeam: printHP(poke)
+                        for i in range(len(YourTeam)):
+                            print(f'({i}) ', end='')
+                            printHP(YourTeam[i])
                         print('------------------------------------------\n')
-                        chPoke = input().capitalize()
+                        chPoke = input()
                     if not back:
-                        chPoke = YourTeam.index(
-                            list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])
-                        yNow = YourTeam[chPoke]
+                        yNow = YourTeam[int(chPoke)]
                     else:
                         switch = False
 
@@ -166,28 +171,35 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
     while list(filter(lambda x: x.status != "Fainted", YourTeam)) and list(filter(lambda x: x.status != "Fainted", FoesTeam)):
         turn = not turn
         if turn:
-            print(*["•Attack", "•Pokemon", "•Bag"], sep = "\n", end="\n\n")
-            opt = input().capitalize()
-            while opt not in ["Attack", "Pokemon", "Bag"]:
-                print(*["•Attack", "•Pokemon", "•Bag"], sep="\n", end="\n\n")
-                opt = input().capitalize()
+            print(*["(0) •Attack", "(1) •Pokemon", "(2) •Bag"], sep = "\n", end="\n\n")
+            opt = input()
+            while opt not in ["0", "1", "2"]:
+                print(*["(0) •Attack", "(1) •Pokemon", "(2) •Bag"], sep="\n", end="\n\n")
+                opt = input()
 
-            if opt == "Attack":
+            if opt == "0":
                 print('------------------------------------------')
-                for mv in yNow.moves: printMove(yNow, mv)
+                for i in range(4):
+                    print(f'({i}) ', end=' ')
+                    printMove(yNow, yNow.moves[i])
                 print('------------------------------------------\n')
-                chMove = input().capitalize()
+                chMove = input()
                 back = False
-                while chMove not in list(map(lambda x: x.name, filter(lambda x: yNow.pp[yNow.moves.index(x)] > 0, yNow.moves))):
+                while not chMove.isdigit() or int(chMove) not in [i for i in range(len(yNow.moves))] or yNow.moves[int(chMove)] \
+                        not in list(filter(lambda x: yNow.pp[yNow.moves.index(x)] > 0, yNow.moves)):
                     if chMove == '':
                         back = True
                         break
-                    for mv in yNow.moves: printMove(yNow, mv)
-                    chMove = input().capitalize()
+                    print('------------------------------------------')
+                    for i in range(4):
+                        print(f'({i}) ', end=' ')
+                        printMove(yNow, yNow.moves[i])
+                    print('------------------------------------------\n')
+                    chMove = input()
                 if back:
                     turn = False
                     continue
-                chMove = list(filter(lambda x: x.name == chMove, yNow.moves))[0]
+                chMove = yNow.moves[int(chMove)]
                 tchMove = chMove
                 if yNow.stats[5] >= fNow.stats[5]:
                     fNow, yNow, turn, dU = yAttack(fNow, yNow, turn, dU)
@@ -212,145 +224,166 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                         continue
                     turn = not turn
 
-            elif opt == "Pokemon":
+            elif opt == "1":
                 print(color.BOLD + "Choose a Pokemon to switch!" + color.END)
                 print('------------------------------------------')
-                for poke in YourTeam: printHP(poke)
+                for i in range(len(YourTeam)):
+                    print(f'({i}) ', end='')
+                    printHP(YourTeam[i])
                 print('------------------------------------------\n')
-                chPoke = input().capitalize()
+                chPoke = input()
                 back = False
-                while chPoke not in list(map(lambda x: data[x.id - 1]['name']['english'], filter(lambda x: x.status != 'Fainted', YourTeam))):
+                while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or\
+                        YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
                     if chPoke == '':
                         back = True
                         break
                     print('------------------------------------------')
-                    for poke in YourTeam: printHP(poke)
+                    for i in range(len(YourTeam)):
+                        print(f'({i}) ', end='')
+                        printHP(YourTeam[i])
                     print('------------------------------------------\n')
-                    chPoke = input().capitalize()
+                    chPoke = input()
                 if back:
                     turn = False
                     continue
-                chPoke = YourTeam.index(
-                    list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])
-                yNow = YourTeam[chPoke]
+                yNow = YourTeam[int(chPoke)]
                 dU.add(yNow)
                 print(f'{You} send out {yNow.name}!')
 
-            elif opt == "Bag":
+            elif opt == "2":
                 print()
-                for elem in Items: print("•" + elem)
+                for i in range(len(Items)):
+                    print(f"({i}) •{list(Items.keys())[i]}")
                 print()
                 back = False
-                chCat = input().lower()
-                while chCat not in Items:
+                chCat = input()
+                while not chCat.isdigit() or int(chCat) not in [i for i in range(len(Items))]:
                     if chCat == '':
                         back = True
                         break
                     print()
-                    for elem in Items: print("•" + elem)
+                    for i in range(len(Items)):
+                        print(f"({i}) •{list(Items.keys())[i]}")
                     print()
-                    chCat = input().lower()
+                    chCat = input()
                 if back:
                     turn = False
                     continue
 
+                chCat = list(Items.keys())[int(chCat)]
+
                 print('------------------------------------------')
-                for it in Items[chCat]: print(f'{it.name}\t({Items[chCat][it]})')
+                for i in range(len(Items[chCat])):
+                    it = list(Items[chCat].keys())[i]
+                    print(f'({i}) {it.name}\t[{Items[chCat][it]}]')
                 print('------------------------------------------')
-                chIt = input().capitalize()
+                chIt = input()
                 if chIt == '':
                     back = True
-                while chIt not in list(map(lambda x: x.name, Items[chCat].keys())):
+                while chIt not in [str(i) for i in range(len(Items[chCat]))]:
                     if chIt == '':
                         back = True
                         break
                     print('------------------------------------------')
-                    for it in Items[chCat]: print(f'{it.name}\t({Items[chCat][it]})')
+                    for i in range(len(Items[chCat])):
+                        it = list(Items[chCat].keys())[i]
+                        print(f'({i}) {it.name}\t[{Items[chCat][it]}]')
                     print('------------------------------------------')
-                    chIt = input().capitalize()
+                    chIt = input()
                 if back:
                     turn = False
                     continue
                 if chCat == "pokeballs":
-                    list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use()
+                    list(Items[chCat].keys())[int(chIt)].use()
                 else:
-                    print()
-                    print(color.BOLD + f'use {chIt} on which pokemon?' + color.END)
-                    print()
+                    chIt = list(Items[chCat].keys())[int(chIt)]
+                    print('\n' + color.BOLD + f'use {chIt.name} on which pokemon?' + color.END + '\n')
                     print('------------------------------------------')
-                    for poke in YourTeam: printHP(poke)
+                    for i in range(len(YourTeam)):
+                        print(f'({i}) ', end='')
+                        printHP(YourTeam[i])
                     print('------------------------------------------\n')
-                    chPoke = input().capitalize()
+                    chPoke = input()
                     back = False
-                    while chPoke not in list(map(lambda x: data[x.id - 1]['name']['english'], YourTeam)):
+                    while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or \
+                            YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
                         if chPoke == '':
                             back = True
                             break
                         print('------------------------------------------')
-                        for poke in YourTeam: printHP(poke)
+                        for i in range(len(YourTeam)):
+                            print(f'({i}) ', end='')
+                            printHP(YourTeam[i])
                         print('------------------------------------------\n')
-                        chPoke = input().capitalize()
+                        chPoke = input()
                     if back:
                         turn = False
                         continue
-                    chPoke = YourTeam[YourTeam.index(list(filter(lambda x: data[x.id - 1]['name']['english'] == chPoke, YourTeam))[0])]
-                    if chIt in healing:
-                        if chPoke.HP == chPoke.stats[0] and chIt in healing:
+                    chPoke = YourTeam[int(chPoke)]
+                    if chIt.name in healing:
+                        if chPoke.HP == chPoke.stats[0] and chIt.name in healing:
                             print('\nThere is no effect\n')
                             turn = False
                             continue
                         else:
-                            list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke)
-                            Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
-                            if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
-                                Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
-                    elif chIt in pprest:
-                        if chIt in ['Elixir', 'Max elixir'] and chPoke.pp == [move.pp for move in chPoke.moves]:
+                            chIt.use(target=chPoke)
+                            Items[chCat][chIt] -= 1
+                            if Items[chCat][chIt] == 0:
+                                Items[chCat].pop(chIt)
+                    elif chIt.name in pprest:
+                        if chIt.name in ['Elixir', 'Max elixir'] and chPoke.pp == [move.pp for move in chPoke.moves]:
                             print('\nThere is no effect\n')
                             turn = False
                             continue
-                        elif chIt in ['Elixir', 'Max elixir'] and chPoke.pp != [move.pp for move in chPoke.moves]:
-                            list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke)
-                            Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
-                            if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
-                                Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
-                        elif chIt in ['Ether', 'Max ether']:
-                            print()
-                            print(color.BOLD + f'which move pp should be restored?' + color.END)
-                            print()
+                        elif chIt.name in ['Elixir', 'Max elixir'] and chPoke.pp != [move.pp for move in chPoke.moves]:
+                            chIt.use(target=chPoke)
+                            Items[chCat][chIt] -= 1
+                            if Items[chCat][chIt] == 0:
+                                Items[chCat].pop(chIt)
+                        elif chIt.name in ['Ether', 'Max ether']:
+                            print('\n' + color.BOLD + f'which move pp should be restored?' + color.END + '\n')
                             print('------------------------------------------')
-                            for mv in chPoke.moves: printMove(chPoke, mv)
+                            for i in range(4):
+                                print(f'({i}) ', end=' ')
+                                printMove(yNow, yNow.moves[i])
                             print('------------------------------------------\n')
-                            chMove = input().capitalize()
+                            chMove = input()
                             back = False
-                            while chMove not in list(map(lambda x: x.name, chPoke.moves)):
+                            while not chMove.isdigit() or int(chMove) not in [[i for i in range(len(yNow.moves))]] or \
+                                    yNow.moves[int(chMove)] \
+                                    not in list(filter(lambda x: yNow.pp[yNow.moves.index(x)] > 0, yNow.moves)):
                                 if chMove == '':
                                     back = True
                                     break
-                                for mv in chPoke.moves: printMove(chPoke, mv)
-                                chMove = input().capitalize()
+                                print('------------------------------------------')
+                                for i in range(4):
+                                    print(f'({i}) ', end=' ')
+                                    printMove(yNow, yNow.moves[i])
+                                print('------------------------------------------\n')
+                                chMove = input()
                             if back:
                                 turn = False
                                 continue
-                            chMove = chPoke.moves.index(list(filter(lambda x: x.name == chMove, chPoke.moves))[0])
+                            chMove = yNow.moves[int(chMove)]
                             if chPoke.moves[chMove].pp == chPoke.pp[chMove]:
                                 print('\nThere is no effect\n')
                                 turn = False
                                 continue
                             else:
-                                list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke, moveId=chMove)
-                                Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
-                                if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
-                                    Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
-                    elif chIt in map(lambda x: x.name, Items["status restore"].keys()):
+                                chIt.use(target=chPoke, moveId=chMove)
+                                Items[chCat][chIt] -= 1
+                                if Items[chCat][chIt] == 0:
+                                    Items[chCat].pop(chIt)
+                    elif chIt.name in map(lambda x: x.name, Items["status restore"].keys()):
                         if chPoke.status == '':
                             print("There is no effect")
                             continue
-                        elif chPoke.status == 'Fainted' and chIt in ['Revive', 'Max revive', 'Revival herb']:
-                            list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0].use(target=chPoke)
-                            Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] -= 1
-                            if Items[chCat][list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0]] == 0:
-                                Items[chCat].pop(list(filter(lambda x: x.name == chIt, Items[chCat].keys()))[0])
+                        elif chPoke.status == 'Fainted' and chIt.name in ['Revive', 'Max revive', 'Revival herb']:
+                            chIt.use(target=chPoke)
+                            Items[chCat][chIt] -= 1
+                            if Items[chCat][chIt] == 0:
+                                Items[chCat].pop(chIt)
 
         else:
             fNow, yNow, turn = fAttack(fNow, yNow, turn)
