@@ -350,6 +350,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                             print('------------------------------------------\n')
                             chMove = input()
                             back = False
+
                             while not chMove.isdigit() or int(chMove) not in [i for i in range(len(yNow.moves))] or \
                                     yNow.moves[int(chMove)] \
                                     not in list(filter(lambda x: yNow.pp[yNow.moves.index(x)] > 0, yNow.moves)):

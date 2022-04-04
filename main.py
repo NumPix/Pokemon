@@ -2,6 +2,7 @@ from Battle import *
 from Data.attacks import *
 from Data.items import *
 
+
 def main():
 
     Items = [(Potion, 4), (Superpotion, 10), (Maxpotion, 2), (Revive, 5), (Maxrevive, 1), (Fullheal, 5), (Xattack2, 3), (Xdefense2, 2), (Elixir, 2), (Ether, 1)]
@@ -36,8 +37,8 @@ def main():
     FoesTeam = [Froslass, Cresselia, Sylveon, Tyrantrum, Kyurem, Bronzong]
 
     for i in range(6):
-        YourTeam[i].expGain(r.randint(1000, 10000), False)
-        FoesTeam[i].expGain(r.randint(1000, 10000), False)
+        YourTeam[i].expGain(r.randint(200000, 250000), False)
+        FoesTeam[i].expGain(r.randint(200000, 250000), False)
 
     r.shuffle(YourTeam)
     r.shuffle(FoesTeam)
