@@ -40,7 +40,10 @@ def printMove(target: Pokemon, Move: Move):
     else:
         moveCol = [color.RED, color.END]
 
-    print(moveCol[0] + "•" + Move.name + f" [{target.pp[target.moves.index(Move)]}/{Move.pp}]" + moveCol[1])
+    typeCol = [color.__dict__[Move.type.upper()], color.END]
+
+    print(moveCol[0] + "•" + Move.name + f" [{target.pp[target.moves.index(Move)]}/{Move.pp}]" +
+          moveCol[1] + typeCol[0] + f' |{Move.type}|' + typeCol[1])
 
 def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
 
