@@ -1,11 +1,14 @@
-from Objects.Pokemon import pokemon
-from Objects.Color import color
-from Objects.Move import move
+from Objects.Pokemon import Pokemon
+from Objects.color import color
+from Objects.Move import Move
 import random as r
 import time
-from Data.data import data, healing, pprest
+from Data.data import *
 
-def printHP(target: pokemon):
+def printHP(target: Pokemon):
+
+    HpCol = []
+
     if target.HP / target.stats[0] > 0.5:
         HpCol = [color.GREEN, color.END]
     if target.HP / target.stats[0] <= 0.5:
@@ -29,7 +32,7 @@ def printHP(target: pokemon):
 
     print(f"{data[target.id - 1]['name']['english']} {target.lvl} lv. {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]} {status}")
 
-def printMove(target: pokemon, Move: move):
+def printMove(target: Pokemon, Move: Move):
     if target.pp[target.moves.index(Move)] / Move.pp >= 0.5:
         moveCol = [color.END, color.END]
     elif target.pp[target.moves.index(Move)] / Move.pp >= 0.25:
