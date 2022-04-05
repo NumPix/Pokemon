@@ -62,6 +62,8 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
     dU = {yNow}
 
     def yCheckFaint():
+        if not list(filter(lambda x: x.status != 'Fainted', YourTeam)):
+            raise Exception("You Lost")
         time.sleep(1)
         print('------------------------------------------')
         for i in range(len(YourTeam)):
@@ -69,7 +71,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
             printHP(YourTeam[i])
         print('------------------------------------------\n')
         print(color.BOLD + 'Choose your next Pokemon!\n' + color.END)
-        chPoke = input()
+        chPoke = input().strip()
         while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or \
                 YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
             print('------------------------------------------')
@@ -77,7 +79,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                 print(f'({i}) ', end='')
                 printHP(YourTeam[i])
             print('------------------------------------------\n')
-            chPoke = input()
+            chPoke = input().strip()
         yNow = YourTeam[int(chPoke)]
         return yNow
 
@@ -98,11 +100,11 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                 fNow = r.choice(list(filter(lambda x: x.status != "Fainted", FoesTeam)))
 
                 print(color.BOLD + f"{Foe} is going to send out {data[fNow.id - 1]['name']['english']}!" + color.END)
-                print("Do you want to switch pokemon (Y/n)?")
+                print("Do you want to switch pokemon (y/N)?")
                 switch = False
-                ch = input().lower()
+                ch = input().lower().strip()
                 while ch not in ['y', 'n', 'yes', 'no', '']:
-                    ch = input()
+                    ch = input().strip()
                 if ch in ['n', 'no', '']: pass
                 else:
                     switch = True
@@ -112,7 +114,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                         print(f'({i}) ', end='')
                         printHP(YourTeam[i])
                     print('------------------------------------------\n')
-                    chPoke = input()
+                    chPoke = input().strip()
                     back = False
                     while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or \
                             YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
@@ -124,7 +126,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                             print(f'({i}) ', end='')
                             printHP(YourTeam[i])
                         print('------------------------------------------\n')
-                        chPoke = input()
+                        chPoke = input().strip()
                     if not back:
                         yNow = YourTeam[int(chPoke)]
                     else:
@@ -143,6 +145,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
         print('● ' * len(list(filter(lambda x: x.status != 'Fainted',FoesTeam))) + '○ '* (6 - len(list(filter(lambda x: x.status != 'Fainted',FoesTeam)))))
         print("\n==========================================\n")
 
+        time.sleep(1)
         return fNow, yNow, turn, dU
 
     def fAttack(fNow, yNow, turn):
@@ -158,6 +161,8 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     6 - len(list(filter(lambda x: x.status != 'Fainted', FoesTeam)))))
         print("\n==========================================\n")
 
+        time.sleep(1)
+
         return fNow, yNow, turn
 
     print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * (
@@ -172,10 +177,10 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
         turn = not turn
         if turn:
             print(*["(0) •Attack", "(1) •Pokemon", "(2) •Bag"], sep = "\n", end="\n\n")
-            opt = input()
+            opt = input().strip()
             while opt not in ["0", "1", "2"]:
                 print(*["(0) •Attack", "(1) •Pokemon", "(2) •Bag"], sep="\n", end="\n\n")
-                opt = input()
+                opt = input().strip()
 
             if opt == "0":
                 print('------------------------------------------')
@@ -183,7 +188,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     print(f'({i}) ', end=' ')
                     printMove(yNow, yNow.moves[i])
                 print('------------------------------------------\n')
-                chMove = input()
+                chMove = input().strip()
                 back = False
                 while not chMove.isdigit() or int(chMove) not in [i for i in range(len(yNow.moves))] or yNow.moves[int(chMove)] \
                         not in list(filter(lambda x: yNow.pp[yNow.moves.index(x)] > 0, yNow.moves)):
@@ -195,7 +200,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                         print(f'({i}) ', end=' ')
                         printMove(yNow, yNow.moves[i])
                     print('------------------------------------------\n')
-                    chMove = input()
+                    chMove = input().strip()
                 if back:
                     turn = False
                     continue
@@ -231,7 +236,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     print(f'({i}) ', end='')
                     printHP(YourTeam[i])
                 print('------------------------------------------\n')
-                chPoke = input()
+                chPoke = input().strip()
                 back = False
                 while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or\
                         YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
@@ -243,7 +248,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                         print(f'({i}) ', end='')
                         printHP(YourTeam[i])
                     print('------------------------------------------\n')
-                    chPoke = input()
+                    chPoke = input().strip()
                 if back:
                     turn = False
                     continue
@@ -257,7 +262,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     print(f"({i}) •{list(Items.keys())[i]}")
                 print()
                 back = False
-                chCat = input()
+                chCat = input().strip()
                 while not chCat.isdigit() or int(chCat) not in [i for i in range(len(Items))]:
                     if chCat == '':
                         back = True
@@ -266,7 +271,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     for i in range(len(Items)):
                         print(f"({i}) •{list(Items.keys())[i]}")
                     print()
-                    chCat = input()
+                    chCat = input().strip()
                 if back:
                     turn = False
                     continue
@@ -278,7 +283,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     it = list(Items[chCat].keys())[i]
                     print(f'({i}) {it.name}\t[{Items[chCat][it]}]')
                 print('------------------------------------------')
-                chIt = input()
+                chIt = input().strip()
                 if chIt == '':
                     back = True
                 while chIt not in [str(i) for i in range(len(Items[chCat]))]:
@@ -290,7 +295,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                         it = list(Items[chCat].keys())[i]
                         print(f'({i}) {it.name}\t[{Items[chCat][it]}]')
                     print('------------------------------------------')
-                    chIt = input()
+                    chIt = input().strip()
                 if back:
                     turn = False
                     continue
@@ -304,7 +309,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                         print(f'({i}) ', end='')
                         printHP(YourTeam[i])
                     print('------------------------------------------\n')
-                    chPoke = input()
+                    chPoke = input().strip()
                     back = False
                     while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))]:
                         if chPoke == '':
@@ -315,7 +320,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                             print(f'({i}) ', end='')
                             printHP(YourTeam[i])
                         print('------------------------------------------\n')
-                        chPoke = input()
+                        chPoke = input().strip()
                     if back:
                         turn = False
                         continue
@@ -347,7 +352,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                                 print(f'({i}) ', end=' ')
                                 printMove(yNow, yNow.moves[i])
                             print('------------------------------------------\n')
-                            chMove = input()
+                            chMove = input().strip()
                             back = False
 
                             while not chMove.isdigit() or int(chMove) not in [i for i in range(len(yNow.moves))] or \
@@ -361,7 +366,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                                     print(f'({i}) ', end=' ')
                                     printMove(yNow, yNow.moves[i])
                                 print('------------------------------------------\n')
-                                chMove = input()
+                                chMove = input().strip()
                             if back:
                                 turn = False
                                 continue
@@ -396,6 +401,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                 print(f"\n{You} send out {yNow.name}!\n")
                 turn = False
                 continue
+
 
     if list(filter(lambda x: x.status != "Fainted", YourTeam)):
         print("You Won!")
