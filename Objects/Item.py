@@ -113,7 +113,7 @@ class Item:
                 print(f'\n{target.name} was revived')
         elif self.type == 2:
             pass
-        elif self.type == 3:
+        elif self.type == "Battle items":
             pass
         else:
             return

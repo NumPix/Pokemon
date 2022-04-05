@@ -1,13 +1,16 @@
 from Objects.Item import Item
 from Objects.color import color
 from Data.data import *
+import json
 import numpy as np
 import random as r
+
+expTypes = json.loads(open("Data/Json/expType.json", 'r').read())
 
 
 class Pokemon:
     def __init__(self, name: str, moves: [str, str, str, str], gender: int, id: int,
-                 lvl: int, expType: int, item: Item = None, status: str = ''):
+                 lvl: int = 1, item: Item = None, status: str = ''):
         self.name = name
         self.gender = gender
         self.moves = moves
@@ -31,8 +34,8 @@ class Pokemon:
         self.type = data[id - 1]['type']
 
         self.lvl = lvl
-        self.exp = [expFormulas[expType](lvl), expFormulas[expType](lvl + 1)]
-        self.expType = expType
+        self.expType = ['Erratic','Fast','Medium Fast','Medium Slow','Slow','Fluctuating'].index(expTypes[str(self.id)])
+        self.exp = [expFormulas[self.expType](lvl), expFormulas[self.expType](lvl + 1)]
         self.item = item
         self.status = status
 
@@ -118,3 +121,6 @@ class Pokemon:
         if self.pp[moveId] != 0:
             self.moves[moveId].use(self, target)
         self.pp[moveId] -= 1
+
+    def changeStats(self, statId, value):
+        self.stats[statId] += value

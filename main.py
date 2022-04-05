@@ -16,22 +16,22 @@ def main():
 
     # Team 1 pokemon
     YourTeam = [
-        Pokemon("Gabby", [Bite, DragonBreath, Bulldoze, AerialAce], 1, 444, 1, 4),
-        Pokemon("Vivi", [BugBite, DrainingKiss, Psybeam, Hurricane], 0, 666, 1, 2),
-        Pokemon("Trump", [Crunch, IcePunch, IronTail, ThunderFang], 1, 735, 1, 2),
-        Pokemon("Misty", [AncientPower, MudSlap, TriAttack, HiddenPower], 0, 175, 1, 1),
-        Pokemon("Kyolya", [Flamethrower, Inferno, LavaPlume, IronTail], 1, 156, 1, 3),
-        Pokemon("Clie", [DoubleEdge, GrassKnot, GyroBall, RockTomb], 1, 344, 1, 2),
+        Pokemon("Gabby", [Bite, DragonBreath, Bulldoze, AerialAce], 1, 444),
+        Pokemon("Vivi", [BugBite, DrainingKiss, Psybeam, Hurricane], 0, 666),
+        Pokemon("Trump", [Crunch, IcePunch, IronTail, ThunderFang], 1, 735),
+        Pokemon("Misty", [AncientPower, MudSlap, TriAttack, HiddenPower], 0, 175),
+        Pokemon("Kyolya", [Flamethrower, Inferno, LavaPlume, IronTail], 1, 156),
+        Pokemon("Clie", [DoubleEdge, GrassKnot, GyroBall, RockTomb], 1, 344),
     ]
 
     # Team 2 pokemon
     FoesTeam = [
-        Pokemon("Doggy", [DarkPulse, HeatWave, ThunderFang, RockSmash], 1, 228, 1, 4),
-        Pokemon("Rein", [Bulldoze, MudSlap, MegaKick, Magnitude], 1, 750, 1, 2),
-        Pokemon("Lei", [BodySlam, AncientPower, IronTail, WaterPulse], 1, 305, 1, 4),
-        Pokemon("Amogus", [EnergyBall, HiddenPower, Astonish, Bide], 1, 590, 1, 2),
-        Pokemon("Creepie", [Earthquake, Spikes, Swift, GyroBall], 1, 204, 1, 2),
-        Pokemon("Samuro", [Blizzard, HydroPump, IceBeam, AirSlash], 1, 503, 1, 3),
+        Pokemon("Doggy", [DarkPulse, HeatWave, ThunderFang, RockSmash], 1, 228),
+        Pokemon("Rein", [Bulldoze, MudSlap, MegaKick, Magnitude], 1, 750),
+        Pokemon("Lei", [BodySlam, AncientPower, IronTail, WaterPulse], 1, 305),
+        Pokemon("Amogus", [EnergyBall, HiddenPower, Astonish, Bide], 1, 590),
+        Pokemon("Creepie", [Earthquake, Spikes, Swift, GyroBall], 1, 204),
+        Pokemon("Samuro", [Blizzard, HydroPump, IceBeam, AirSlash], 1, 503),
     ]
 
     for i in range(6):
