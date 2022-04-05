@@ -306,8 +306,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     print('------------------------------------------\n')
                     chPoke = input()
                     back = False
-                    while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or \
-                            YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
+                    while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))]:
                         if chPoke == '':
                             back = True
                             break
@@ -322,7 +321,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                         continue
                     chPoke = YourTeam[int(chPoke)]
                     if chIt.name in healing:
-                        if chPoke.HP == chPoke.stats[0] and chIt.name in healing:
+                        if (chPoke.HP == chPoke.stats[0] and chIt.name in healing) or chPoke.status == 'Fainted':
                             print('\nThere is no effect\n')
                             turn = False
                             continue
