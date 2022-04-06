@@ -37,6 +37,7 @@ class Move:
             crit = r.randint(0, 16) == 1
             critical = 1.5 if crit else 1
             TypeMult = 1
+            burned = 0.5 if user.status == 'Burned' else 1
             for type in target.type:
                 if type in typeChart[self.type]["Strength"]:
                     TypeMult *= 2
@@ -52,7 +53,7 @@ class Move:
             elif TypeMult < 1 and TypeMult != 0:
                 print(color.YELLOW + "its not very effective" + color.END)
 
-            damage = hit * int((((2 * user.lvl / 5 + 2) * self.power * (
+            damage = hit * int(burned * (((2 * user.lvl / 5 + 2) * self.power * (
                 user.stats[1] if self.category == 0 else user.stats[3]) / (
                                      target.stats[2] if self.category == 0 else target.stats[
                                          4]) / 50) + 2) * rand * STAB * critical * TypeMult)
@@ -61,7 +62,15 @@ class Move:
             print(f"{data[target.id - 1]['name']['english']} got {damage} damage!")
             if crit:
                 print(color.RED + "A critical hit!" + color.END)
+
+            if self.name == "Inferno" and hit and "Fire" not in [target.type]:
+                target.getStatus("Burned")
+
+            if target.status == 'Frozen' and (self.type == 'Fire' or self.name == 'Scald' or self.name == 'Steam erruption'):
+                target.status = ''
+
             if target.HP <= 0:
                 target.HP = 0
                 target.status = "Fainted"
                 print(color.RED + f"{data[target.id - 1]['name']['english']} fainted!" + color.END)
+

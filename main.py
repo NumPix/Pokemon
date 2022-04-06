@@ -14,6 +14,8 @@ def main():
         'battle items': dict(list(filter(lambda x: x[0].type == "Battle items", Items)))
     }
 
+    # Pokemon( Name Attacks Gender Id )
+
     # Team 1 pokemon
     YourTeam = [
         Pokemon("Gabby", [Bite, DragonBreath, Bulldoze, AerialAce], 1, 444),

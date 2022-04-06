@@ -36,7 +36,7 @@ def printHP(target: Pokemon):
     while len(hp) < 17:
         hp += ' '
 
-    print(f"{hp}{HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]} {status}")
+    print(f"{hp}{HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}\t{status}")
 
 def printMove(target: Pokemon, Move: Move):
     if target.pp[target.moves.index(Move)] / Move.pp >= 0.5:
@@ -73,7 +73,6 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
     def yCheckFaint():
         if not list(filter(lambda x: x.status != 'Fainted', YourTeam)):
             raise Exception("You Lost")
-        time.sleep(1)
         print('------------------------------------------')
         for i in range(len(YourTeam)):
             print(f'({i}) ', end='')
@@ -290,7 +289,10 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                 print('------------------------------------------')
                 for i in range(len(Items[chCat])):
                     it = list(Items[chCat].keys())[i]
-                    print(f'({i}) {it.name}\t[{Items[chCat][it]}]')
+                    temp = f'({i}) {it.name}'
+                    while len(temp) < 24:
+                        temp += ' '
+                    print(f'{temp}[{Items[chCat][it]}]')
                 print('------------------------------------------')
                 chIt = input().strip()
                 if chIt == '':
@@ -400,6 +402,79 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                                 Items[chCat].pop(chIt)
 
         else:
+            if fNow.status == 'Burned':
+                dmg = fNow.stats[0] // 8
+                print(color.BOLD + f"{data[fNow.id - 1]['name']['english']} got {dmg} damage due to its burn!" + color.END)
+                fNow.HP -= dmg
+                if fNow.HP <= 0:
+                    fNow.status = 'Fainted'
+                print(color.RED + f"{data[fNow.id - 1]['name']['english']} fainted!" + color.END)
+            if fNow.status == 'Frozen':
+                print()
+            if fNow.status == "Fainted":
+                time.sleep(1)
+
+                for poke in filter(lambda x: x.status != 'Fainted', dU):
+                    print('\n------------------------------------------')
+                    print(f'{poke.name} got {poke.expCalc(poke, len(dU))} xp!')
+                    poke.expGain(poke.expCalc(poke, len(dU)))
+                    print('------------------------------------------\n')
+                    time.sleep(1)
+                dU = {yNow}
+                try:
+                    fNow = r.choice(list(filter(lambda x: x.status != "Fainted", FoesTeam)))
+
+                    print(
+                        color.BOLD + f"{Foe} is going to send out {data[fNow.id - 1]['name']['english']}!" + color.END)
+                    print("Do you want to switch pokemon (y/N)?")
+                    switch = False
+                    ch = input().lower().strip()
+                    while ch not in ['y', 'n', 'yes', 'no', '']:
+                        ch = input().strip()
+                    if ch in ['n', 'no', '']:
+                        pass
+                    else:
+                        switch = True
+                        print(color.BOLD + "Choose a Pokemon to switch!" + color.END)
+                        print('------------------------------------------')
+                        for i in range(len(YourTeam)):
+                            print(f'({i}) ', end='')
+                            printHP(YourTeam[i])
+                        print('------------------------------------------\n')
+                        chPoke = input().strip()
+                        back = False
+                        while not chPoke.isdigit() or int(chPoke) not in [i for i in range(len(YourTeam))] or \
+                                YourTeam[int(chPoke)] not in list(filter(lambda x: x.status != 'Fainted', YourTeam)):
+                            if chPoke == '':
+                                back = True
+                                break
+                            print('------------------------------------------')
+                            for i in range(len(YourTeam)):
+                                print(f'({i}) ', end='')
+                                printHP(YourTeam[i])
+                            print('------------------------------------------\n')
+                            chPoke = input().strip()
+                        if not back:
+                            yNow = YourTeam[int(chPoke)]
+                        else:
+                            switch = False
+
+                    print(f"{Foe} send out {fNow.name}!")
+                    if switch:
+                        print(f"{You} send out {yNow.name}!")
+                    turn = False
+                except IndexError:
+                    pass
+                print("\n==========================================\n")
+                print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * (
+                        6 - len(list(filter(lambda x: x.status != 'Fainted', YourTeam)))))
+                printHP(yNow)
+                printHP(fNow)
+                print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * (
+                        6 - len(list(filter(lambda x: x.status != 'Fainted', FoesTeam)))))
+                continue
+
+
             fNow, yNow, turn = fAttack(fNow, yNow, turn)
             if yNow.status == "Fainted":
                 try:
@@ -408,7 +483,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                     break
                 dU.add(yNow)
                 print(f"\n{You} send out {yNow.name}!\n")
-                turn = False
+                turn = True
                 continue
 
 

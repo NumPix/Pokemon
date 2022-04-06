@@ -114,7 +114,7 @@ class Pokemon:
                         *deltaStats, *self.stats))
 
     def expCalc(self, target, pokemonUsed) -> int:
-        return int(1.5 * target.lvl * int(baseXp[data[target.id]['name']['english']]) / 5 / pokemonUsed * (
+        return int(1.5 * target.lvl * int(baseXp[data[target.id - 1]['name']['english']]) / 5 / pokemonUsed * (
                     ((2 * target.lvl + 10) / (target.lvl + self.lvl + 10)) ** 2.5))
 
     def attack(self, moveId, target):
@@ -124,3 +124,12 @@ class Pokemon:
 
     def changeStats(self, statId, value):
         self.stats[statId] += value
+
+    def getStatus(self, status):
+        self.status = status
+        if self.status in ['Poisoned', 'Burned', 'Paralyzed']:
+            print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is {self.status}!\n" + color.END)
+        if self.status == 'Frozen':
+            print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is frozen solid!\n" + color.END)
+        if self.status == 'Sleeping':
+            print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} felt asleep!\n" + color.END)
