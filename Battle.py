@@ -30,7 +30,13 @@ def printHP(target: Pokemon):
     elif target.status == 'Burned':
         status = '|' + color.RED + target.status + color.END + '|'
 
-    print(f"{data[target.id - 1]['name']['english']} {target.lvl} lv. {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]} {status}")
+
+    hp = f"{data[target.id - 1]['name']['english']} {target.lvl} lv."
+
+    while len(hp) < 17:
+        hp += ' '
+
+    print(f"{hp}{HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]} {status}")
 
 def printMove(target: Pokemon, Move: Move):
     if target.pp[target.moves.index(Move)] / Move.pp >= 0.5:
@@ -42,8 +48,11 @@ def printMove(target: Pokemon, Move: Move):
 
     typeCol = [color.__dict__[Move.type.upper()], color.END]
 
-    print(moveCol[0] + "•" + Move.name + f" [{target.pp[target.moves.index(Move)]}/{Move.pp}]" +
-          moveCol[1] + typeCol[0] + f' |{Move.type}|' + typeCol[1])
+    move = moveCol[0] + "•" + Move.name + f" [{target.pp[target.moves.index(Move)]}/{Move.pp}]" + moveCol[1]
+    while len(move) < 35:
+        move += ' '
+
+    print(move + typeCol[0] + f'|{Move.type}|' + typeCol[1])
 
 def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
 
