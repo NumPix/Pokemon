@@ -1,0 +1,31 @@
+{
+  "YourTeam": [
+    {"name": "La+", "id":  131, "gender": 0, "attacks":  ["AuroraBeam", "Blizzard", "HydroPump", "IceBeam"]},
+    {"name": "Zappy", "id":  135, "gender": 1, "attacks":  ["ElectroBall", "Thunder", "ZapCannon", "ShadowBall"]},
+    {"name": "Kyolya", "id":  156, "gender": 1, "attacks":  ["Flamethrower", "Inferno", "LavaPlume", "IronTail"]},
+    {"name": "Gabby", "id":  444, "gender": 1, "attacks":  ["Bite", "DragonBreath", "Bulldoze", "AerialAce"]},
+    {"name": "Vivi", "id":  666, "gender": 0, "attacks":  ["BugBite", "DrainingKiss", "Psybeam", "Hurricane"]},
+    {"name": "Snaky", "id":  497, "gender": 1, "attacks":  ["LeafTornado", "MagicalLeaf", "AquaTail", "Outrage"]}
+  ],
+  "FoesTeam": [
+    {"name": "Lei", "id":  305, "gender": 1, "attacks":  ["BodySlam", "AncientPower", "IronTail", "WaterPulse"]},
+    {"name": "Doggy", "id":  228, "gender": 1, "attacks":  ["DarkPulse", "HeatWave", "ThunderFang", "RockSmash"]},
+    {"name": "Rein", "id":  750, "gender": 1, "attacks":  ["Bulldoze", "MudSlap", "MegaKick", "Magnitude"]},
+    {"name": "Amogus", "id":  590, "gender": 1, "attacks":  ["EnergyBall", "HiddenPower", "Astonish", "Bide"]},
+    {"name": "Creepie", "id":  204, "gender": 1, "attacks":  ["Earthquake", "Spikes", "Swift", "GyroBall"]},
+    {"name": "Samuro", "id":  503, "gender": 1, "attacks":  ["Blizzard", "HydroPump", "IceBeam", "AirSlash"]}
+  ],
+  "Items": {
+    "Potion": 4,
+    "Superpotion": 10,
+    "Maxpotion": 2,
+    "Revive": 5,
+    "Maxrevive": 1,
+    "Fullheal": 5,
+    "Xattack2": 3,
+    "Xdefense2": 2,
+    "Elixir": 2,
+    "Ether": 1,
+    "Fullrestore": 3
+  }
+}

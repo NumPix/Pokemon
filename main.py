@@ -4,8 +4,10 @@ from Data.items import *
 
 
 def main():
-    Items = [(Potion, 4), (Superpotion, 10), (Maxpotion, 2), (Revive, 5), (Maxrevive, 1), (Fullheal, 5), (Xattack2, 3),
-             (Xdefense2, 2), (Elixir, 2), (Ether, 1)]
+    with open("config.json") as cnf:
+        config = json.load(cnf)
+
+    Items = list(map(lambda x: (globals()[x[0]], x[1]), config["Items"].items()))
 
     Bag = {
         'hp/pp restore': dict(list(filter(lambda x: x[0].type == "HP/PP restore", Items))),
@@ -14,34 +16,19 @@ def main():
         'battle items': dict(list(filter(lambda x: x[0].type == "Battle items", Items)))
     }
 
-    # Pokemon( Name Attacks Gender Id )
+    YourTeam = list(
+        map(lambda x: Pokemon(x["name"], list(map((lambda y: globals()[y]), x["attacks"])), x["gender"], x["id"]),
+            config["YourTeam"]))
 
-    # Team 1 pokemon
-    YourTeam = [
-        Pokemon("Gabby", [Bite, DragonBreath, Bulldoze, AerialAce], 1, 444),
-        Pokemon("Vivi", [BugBite, DrainingKiss, Psybeam, Hurricane], 0, 666),
-        Pokemon("Trump", [Crunch, IcePunch, IronTail, ThunderFang], 1, 735),
-        Pokemon("Misty", [AncientPower, MudSlap, TriAttack, HiddenPower], 0, 175),
-        Pokemon("Kyolya", [Flamethrower, Inferno, LavaPlume, IronTail], 1, 156),
-        Pokemon("Clie", [DoubleEdge, GrassKnot, GyroBall, RockTomb], 1, 344),
-    ]
+    FoesTeam = list(
+        map(lambda x: Pokemon(x["name"], list(map((lambda y: globals()[y]), x["attacks"])), x["gender"], x["id"]),
+            config["FoesTeam"]))
 
-    # Team 2 pokemon
-    FoesTeam = [
-        Pokemon("Doggy", [DarkPulse, HeatWave, ThunderFang, RockSmash], 1, 228),
-        Pokemon("Rein", [Bulldoze, MudSlap, MegaKick, Magnitude], 1, 750),
-        Pokemon("Lei", [BodySlam, AncientPower, IronTail, WaterPulse], 1, 305),
-        Pokemon("Amogus", [EnergyBall, HiddenPower, Astonish, Bide], 1, 590),
-        Pokemon("Creepie", [Earthquake, Spikes, Swift, GyroBall], 1, 204),
-        Pokemon("Samuro", [Blizzard, HydroPump, IceBeam, AirSlash], 1, 503),
-    ]
-
-    for i in range(6):
+    for i in range(len(YourTeam)):
         YourTeam[i].expGain(r.randint(200000, 250000), False)
-        FoesTeam[i].expGain(r.randint(200000, 250000), False)
 
-    r.shuffle(YourTeam)
-    r.shuffle(FoesTeam)
+    for i in range(len(FoesTeam)):
+        FoesTeam[i].expGain(r.randint(200000, 250000), False)
 
     battle(YourTeam, FoesTeam, "Shiro", "Izuna", Bag)
 

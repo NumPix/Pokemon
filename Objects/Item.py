@@ -1,3 +1,5 @@
+from Objects.color import color
+
 class Item:
     def __init__(self, name, type: str, id: int):
         self.name = name
@@ -92,12 +94,12 @@ class Item:
                 target.pp[moveId] += 10
                 if target.pp[moveId] > target.moves[moveId].pp:
                     target.pp[moveId] = target.moves[moveId].pp
-                    print(f'\n{target.name}s {target.moves[moveId].name} pp were fully restored')
+                    print(f'\n{target.name}s {color.BOLD}{target.moves[moveId].name}{color.END} pp were fully restored')
                 else:
                     print(f'\n{target.name}s {target.moves[moveId].name} pp were restored')
             elif self.name == "Max Ether":
                 target.pp[moveId] = target.moves[moveId].pp
-                print(f'\n{target.name}s {target.moves[moveId].name} pp were fully restored')
+                print(f'\n{target.name}s {color.BOLD}{target.moves[moveId].name}{color.END} pp were fully restored')
         elif self.type == "Status restore":
             if self.name == 'Revive':
                 target.status = ''
@@ -111,6 +113,11 @@ class Item:
                 target.status = ''
                 target.HP = target.stats[0]
                 print(f'\n{target.name} was revived')
+            elif self.name in ['Full heal', 'Full restore', 'Ice heal', 'Pumkin berry', 'Aspear berry', 'Lava cookie',
+                               'Heal powder', 'Lum berry', 'Burn heal', 'Rawst berry', 'Paralyze heal', 'Cheri berry']:
+                print(f'\n{target.name} is no more {target.status.lower()}')
+                target.status = ''
+
         elif self.type == 2:
             pass
         elif self.type == "Battle items":

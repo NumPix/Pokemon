@@ -126,10 +126,19 @@ class Pokemon:
         self.stats[statId] += value
 
     def getStatus(self, status):
-        self.status = status
-        if self.status in ['Poisoned', 'Burned', 'Paralyzed']:
-            print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is {self.status}!\n" + color.END)
-        if self.status == 'Frozen':
-            print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is frozen solid!\n" + color.END)
-        if self.status == 'Sleeping':
-            print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} felt asleep!\n" + color.END)
+        if 'Fire' in self.type and status == 'Burned':
+            return
+        if 'Ice' in self.type and status == 'Frozen':
+            return
+        if 'Electric' in self.type and status == 'Paralyzed':
+            return
+        if self.status == '':
+            self.status = status
+            if self.status in ['Poisoned', 'Burned', 'Paralyzed']:
+                print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is {self.status}!\n" + color.END)
+                if self.status == 'Paralyzed':
+                    self.stats[5] *= 0.5
+            if self.status == 'Frozen':
+                print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is frozen solid!\n" + color.END)
+            if self.status == 'Sleeping':
+                print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} felt asleep!\n" + color.END)

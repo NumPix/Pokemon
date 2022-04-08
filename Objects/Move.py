@@ -48,6 +48,12 @@ class Move:
                     TypeMult = 0
                     break
 
+            # Type strengths exceptions:
+            if self.name == "Freeze-dry" and "Water" in [target.type]:
+                TypeMult *= 2
+
+            # End of exceptions
+
             if TypeMult > 1:
                 print(color.YELLOW + "its very effective!" + color.END)
             elif TypeMult < 1 and TypeMult != 0:
@@ -63,11 +69,59 @@ class Move:
             if crit:
                 print(color.RED + "A critical hit!" + color.END)
 
-            if self.name == "Inferno" and hit and "Fire" not in [target.type]:
-                target.getStatus("Burned")
+            # Status dealing
+
+            if self.name == "Tri Attack":
+                if r.choices([1, 0], [1, 4])[0]:
+                    status = r.choices(["Frozen", "Paralyzed", "Burned"], [1,1,1])[0]
+                    target.status = status
+
+            if self.name in ["Body slam", "Bolt strike", "Bounce", "Buzzy buzz", "Discharge", "Dragon breath", "Force palm",
+                             "Freeze shock", "Glare", "Lick", "Nuzzle", "Shadow bolt", "Spark", "Splishy splash", "Stun spore",
+                             "Thunder", "Thunder fang", "Thunder punch", "Thunder shock", "Thunder wave", "Thunderbolt",
+                             "Volt tackle", "Zap cannon"]:
+                if self.name in ["Buzzy buzz", "Glare", "Nuzzle", "Stun spore", "Thunder wave", "Zap cannon"]:
+                    target.getStatus("Paralyzed")
+                elif self.name in ["Body slam", "Bounce", "Discharge", "Dragon breath", "Force palm", "Freeze shock",
+                                   "Lick", "Spark", "Splishy splash", "Thunder"]:
+                    if r.choices([1, 0], [3, 7])[0]:
+                        target.getStatus("Paralyzed")
+                elif self.name in ["Bolt strike"]:
+                    if r.choices([1, 0], [1, 4])[0]:
+                        target.getStatus("Paralyzed")
+                elif self.name in ["Shadow bolt", "Thunder fang", "Thunder punch", "Thunder shock", "Thunderbolt"]:
+                    if r.choices([1, 0], [1, 9])[0]:
+                        target.getStatus("Paralyzed")
+
+            if self.name in ["Blaze kick", "Blue flare", "Ember", "Fire blast",
+                             "Fire fang", "Fire punch", "Flame wheel", "Flamethrower", "Flare blitz", "Heat wave",
+                             "Ice burn", "Inferno", "Lava plume", "Pyro ball", "Sacred fire", "Scald", "Scorching sands",
+                             "Searing shot", "Shadow fire", "Sizzly slide", "Steam eruption", "Will-o-wisp"] and hit:
+                if self.name in ["Inferno", "Sizzly slide", "Will-o-wisp"]:
+                    target.getStatus("Burned")
+                elif self.name in ["Blaze kick", "Ember", "Fire blast",
+                             "Fire fang", "Fire punch", "Flame wheel", "Flamethrower", "Flare blitz", "Heat wave",
+                             "Pyro ball", "Shadow fire"]:
+                    if r.choices([1, 0], [1, 9])[0]:
+                        target.getStatus("Burned")
+                elif self.name in ["Blue flare"]:
+                    if r.choices([1, 0], [1, 4])[0]:
+                        target.getStatus("Burned")
+                elif self.name in ["Lava plume", "Scald", "Scorching sands", "Searing shot", "Steam eruption"]:
+                    if r.choices([1, 0], [3, 7])[0]:
+                        target.getStatus("Burned")
+                elif self.name in ["Sacred fire"]:
+                    if r.choices([1, 0], [1, 1])[0]:
+                        target.getStatus("Burned")
+
+            if self.name in ["Ice beam", "Blizzard", "Freeze-dry", "Freezing glare", "Ice fang", "Ice punch", "Powder snow", "Shadow chill"] and hit:
+                if r.choices([1, 0], [1, 9])[0]:
+                    target.getStatus("Frozen")
 
             if target.status == 'Frozen' and (self.type == 'Fire' or self.name == 'Scald' or self.name == 'Steam erruption'):
                 target.status = ''
+
+            # End of status dealing
 
             if target.HP <= 0:
                 target.HP = 0
