@@ -189,6 +189,12 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
             parAtt = r.choices([True, False], [3, 1])[0]
             if not parAtt:
                 print(color.BOLD + f"{data[fNow.id - 1]['name']['english']} is paralyzed! It can't move!" + color.END)
+                print('\n' + '● ' * len(list(filter(lambda x: x.status != 'Fainted', YourTeam))) + '○ ' * (
+                        6 - len(list(filter(lambda x: x.status != 'Fainted', YourTeam)))))
+                printHP(yNow)
+                printHP(fNow)
+                print('● ' * len(list(filter(lambda x: x.status != 'Fainted', FoesTeam))) + '○ ' * (
+                        6 - len(list(filter(lambda x: x.status != 'Fainted', FoesTeam)))))
                 print("\n==========================================\n")
                 return fNow, yNow, turn, dU
         if fNow.status == "Fainted":
@@ -457,14 +463,12 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                             print('------------------------------------------')
                             for i in range(4):
                                 print(f'({i}) ', end=' ')
-                                printMove(yNow, yNow.moves[i])
+                                printMove(chPoke, chPoke.moves[i])
                             print('------------------------------------------\n')
                             chMove = input().strip()
                             back = False
 
-                            while not chMove.isdigit() or int(chMove) not in [i for i in range(len(yNow.moves))] or \
-                                    yNow.moves[int(chMove)] \
-                                    not in list(filter(lambda x: yNow.pp[yNow.moves.index(x)] > 0, yNow.moves)):
+                            while not chMove.isdigit() or int(chMove) not in [i for i in range(len(yNow.moves))]:
                                 if chMove == '':
                                     back = True
                                     break
