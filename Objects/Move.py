@@ -76,12 +76,36 @@ class Move:
                     status = r.choices(["Frozen", "Paralyzed", "Burned"], [1,1,1])[0]
                     target.status = status
 
+            if self.name in ["Cross poison", "Gunk shot", "Poison gas", "Poison jab", "Poison powder", "Poison sting",
+                             "Poison tail", "Shell side arm", "Sludge", "Sludge bomb", "Sludge wave", "Smog", "Toxic thread",
+                             "Toxic"] and hit:
+                if self.name in ["Poison gas", "Poison powder", "Toxic thread", "Toxic"]:
+                    if self.name != 'Poison powder' or 'Grass' not in target.type:
+                        target.getStatus("Poisoned")
+                elif self.name in ["Cross poison", "Poison tail", "Sludge wave"]:
+                    if r.choices([1, 0], [1, 9])[0]:
+                        target.getStatus("Poisoned")
+                elif self.name in ["Gunk shot", "Poison jab", "Poison sting", "Sludge bomb"]:
+                    if r.choices([1, 0], [3, 7])[0]:
+                        target.getStatus("Poisoned")
+                elif self.name in ["Shell side arm"]:
+                    if r.choices([1, 0], [2, 8])[0]:
+                        target.getStatus("Poisoned")
+                elif self.name in ["Smog"]:
+                    if r.choices([1, 0], [4, 6])[0]:
+                        target.getStatus("Poisoned")
+                elif self.name in ["Toxic"]:
+                    if r.choices([1, 0], [1, 1])[0]:
+                        target.getStatus("Poisoned")
+
+
             if self.name in ["Body slam", "Bolt strike", "Bounce", "Buzzy buzz", "Discharge", "Dragon breath", "Force palm",
                              "Freeze shock", "Glare", "Lick", "Nuzzle", "Shadow bolt", "Spark", "Splishy splash", "Stun spore",
                              "Thunder", "Thunder fang", "Thunder punch", "Thunder shock", "Thunder wave", "Thunderbolt",
-                             "Volt tackle", "Zap cannon"]:
+                             "Volt tackle", "Zap cannon"] and hit:
                 if self.name in ["Buzzy buzz", "Glare", "Nuzzle", "Stun spore", "Thunder wave", "Zap cannon"]:
-                    target.getStatus("Paralyzed")
+                    if self.name != 'Stun spore' or 'Grass' not in target.type:
+                        target.getStatus("Paralyzed")
                 elif self.name in ["Body slam", "Bounce", "Discharge", "Dragon breath", "Force palm", "Freeze shock",
                                    "Lick", "Spark", "Splishy splash", "Thunder"]:
                     if r.choices([1, 0], [3, 7])[0]:

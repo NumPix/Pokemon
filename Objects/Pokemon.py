@@ -132,6 +132,8 @@ class Pokemon:
             return
         if 'Electric' in self.type and status == 'Paralyzed':
             return
+        if 'Steel' in self.type and status == 'Poisoned':
+            return
         if self.status == '':
             self.status = status
             if self.status in ['Poisoned', 'Burned', 'Paralyzed']:
