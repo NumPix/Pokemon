@@ -61,5 +61,8 @@ natureList = ["Hardy", "Lonely", "Adamant", "Naughty", "Brave",
               "Calm", "Gentle", "Careful", "Quirky", "Sassy",
               "Timid", "Hasty", "Jolly", "Naive", "Serious"]
 
-healing = ['Potion', 'Super potion', 'Hyper potion', 'Max potion', 'Fresh water', 'Soda pop', 'Lemonade', 'Moomoo milk']
+healing = ['Potion', 'Super potion', 'Hyper potion', 'Max potion', 'Fresh water', 'Soda pop', 'Lemonade', 'Moomoo milk', 'Full restore']
 pprest = ['Ether', 'Max ether', 'Elixir', 'Max elixir']
+frozenHeal = ['Full heal', 'Full restore', 'Ice heal', 'Pumkin berry', 'Aspear berry', 'Lava cookie', 'Heal powder', 'Lum berry']
+burnHeal = ['Burn heal', 'Rawst berry', 'Full heal', 'Lava cookie', 'Full restore', 'Heal powder', 'Lum berry']
+paralysisHeal = ['Paralyze heal', 'Cheri berry', 'Full heal', 'Lava cookie','Full restore', 'Heal powder', 'Lum berry']

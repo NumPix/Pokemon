@@ -496,23 +496,19 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                             Items[chCat][chIt] -= 1
                             if Items[chCat][chIt] == 0:
                                 Items[chCat].pop(chIt)
-                        elif chPoke.status == 'Frozen' and chIt.name in ['Full heal', 'Full restore', 'Ice heal',
-                                                                         'Pumkin berry', 'Aspear berry', 'Lava cookie',
-                                                                         'Heal powder', 'Lum berry']:
+                        elif chPoke.status == 'Frozen' and chIt.name in frozenHeal:
                             chIt.use(target=chPoke)
                             Items[chCat][chIt] -= 1
                             if Items[chCat][chIt] == 0:
                                 Items[chCat].pop(chIt)
 
-                        elif chPoke.status == 'Burned' and chIt.name in ['Burn heal', 'Rawst berry', 'Full heal', 'Lava cookie',
-                                                                         'Full restore', 'Heal powder', 'Lum berry']:
+                        elif chPoke.status == 'Burned' and chIt.name in burnHeal:
                             chIt.use(target=chPoke)
                             Items[chCat][chIt] -= 1
                             if Items[chCat][chIt] == 0:
                                 Items[chCat].pop(chIt)
 
-                        elif chPoke.status == 'Paralyzed' and chIt.name in ['Paralyze heal', 'Cheri berry', 'Full heal', 'Lava cookie',
-                                                                         'Full restore', 'Heal powder', 'Lum berry']:
+                        elif chPoke.status == 'Paralyzed' and chIt.name in paralysisHeal:
                             chIt.use(target=chPoke)
                             Items[chCat][chIt] -= 1
                             if Items[chCat][chIt] == 0:

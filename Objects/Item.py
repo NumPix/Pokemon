@@ -74,7 +74,7 @@ class Item:
                 else:
                     print(f'\n{target.name} recovered {healed} HP!')
             elif self.name == "Full restore":
-                print(f'\n{target.name}s HP maxed out!')
+                print(f'\n{target.name} fully restored')
                 target.HP = target.stats[0]
                 target.status = ''
             elif self.name == "Elixir":
