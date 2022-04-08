@@ -119,6 +119,7 @@ class Move:
                     target.getStatus("Frozen")
 
             if target.status == 'Frozen' and (self.type == 'Fire' or self.name == 'Scald' or self.name == 'Steam erruption'):
+                print(color.BOLD + f"{data[target.id - 1]['name']['english']} thawed out!")
                 target.status = ''
 
             # End of status dealing
