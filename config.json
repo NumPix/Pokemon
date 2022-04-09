@@ -1,10 +1,10 @@
 {
   "YourTeam": [
+    {"name": "Kyolya", "id":  156, "gender": 1, "attacks":  ["FlameWheel", "Inferno", "LavaPlume", "IronTail"]},
+    {"name": "Zergy", "id":  212, "gender": 1, "attacks":  ["CrossPoison", "MetalClaw", "SilverWind", "XScissor"]},
     {"name": "La+", "id":  131, "gender": 0, "attacks":  ["AuroraBeam", "Blizzard", "HydroPump", "IceBeam"]},
     {"name": "Zappy", "id":  135, "gender": 1, "attacks":  ["ElectroBall", "Thunder", "ZapCannon", "ShadowBall"]},
-    {"name": "Kyolya", "id":  156, "gender": 1, "attacks":  ["Flamethrower", "Inferno", "LavaPlume", "IronTail"]},
     {"name": "Gabby", "id":  444, "gender": 1, "attacks":  ["Bite", "DragonBreath", "Bulldoze", "AerialAce"]},
-    {"name": "Vivi", "id":  666, "gender": 0, "attacks":  ["BugBite", "DrainingKiss", "Psybeam", "Hurricane"]},
     {"name": "Snaky", "id":  497, "gender": 1, "attacks":  ["LeafTornado", "MagicalLeaf", "AquaTail", "Outrage"]}
   ],
   "FoesTeam": [

@@ -16,6 +16,8 @@ def printHP(target: Pokemon):
     if target.HP / target.stats[0] <= 0.25:
         HpCol = [color.RED, color.END]
 
+    gender = color.BOLD + color.BLUE + "♂" + color.END if target.gender == 1 else color.BOLD + color.FAIRY+ "♀" + color.END
+
     status = ''
     if target.status == 'Fainted':
         status = '|' + color.RED + target.status + color.END + '|'
@@ -31,12 +33,12 @@ def printHP(target: Pokemon):
         status = '|' + color.RED + target.status + color.END + '|'
 
 
-    hp = f"{data[target.id - 1]['name']['english']} {target.lvl} lv."
+    hp = f"{data[target.id - 1]['name']['english']} {gender} "
 
-    while len(hp) < 17:
+    while len(hp) < 27:
         hp += ' '
 
-    print(f"{hp}{HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}\t{status}")
+    print(f"{hp}lv{target.lvl} {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}\t{status}")
 
 def printMove(target: Pokemon, Move: Move):
     if target.pp[target.moves.index(Move)] / Move.pp >= 0.5:

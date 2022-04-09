@@ -30,7 +30,7 @@ def main():
     for i in range(len(FoesTeam)):
         FoesTeam[i].expGain(r.randint(200000, 250000), False)
 
-    battle(YourTeam, FoesTeam, "Shiro", "Izuna", Bag)
+    battle(YourTeam, FoesTeam, "Izuna", "Glacie", Bag)
 
 
 if __name__ == '__main__':
