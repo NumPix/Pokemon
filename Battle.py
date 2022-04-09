@@ -38,6 +38,8 @@ def printHP(target: Pokemon):
     while len(hp) < 27:
         hp += ' '
 
+    hp += (3 - len(str(target.lvl))) * ' '
+
     print(f"{hp}lv{target.lvl} {HpCol[0]}[{'█' * round(target.HP / target.stats[0] / 0.05) + '░' * (20 - round(target.HP / target.stats[0] / 0.05))}]{HpCol[1]} {target.HP}/{target.stats[0]}\t{status}")
 
 def printMove(target: Pokemon, Move: Move):
