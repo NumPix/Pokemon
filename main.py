@@ -1,3 +1,5 @@
+import random
+
 from Battle import *
 from Data.attacks import *
 from Data.items import *
@@ -24,11 +26,11 @@ def main():
         map(lambda x: Pokemon(x["name"], list(map((lambda y: globals()[y]), x["attacks"])), x["gender"], x["id"]),
             config["FoesTeam"]))
 
-    YourTeam[0].lvlGain(9)
-    YourTeam[0].expGain(200)
+    for i in range(len(YourTeam)):
+        YourTeam[i].expGain(random.randint(200000, 300000), False)
 
-    FoesTeam[0].lvlGain(6)
-    FoesTeam[0].expGain(100)
+    for i in range(len(FoesTeam)):
+        FoesTeam[i].expGain(random.randint(200000, 300000), False)
 
     battle(YourTeam, FoesTeam, "Izuna", "Glacie", Bag)
 
