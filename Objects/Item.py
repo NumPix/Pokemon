@@ -1,4 +1,5 @@
 from Objects.color import color
+from Data.data import *
 
 class Item:
     def __init__(self, name, type: str, id: int):
@@ -12,68 +13,20 @@ class Item:
         """
         self.id = id
 
+    def heal(self, target):
+        target.HP += healingAmout[self.name]
+        if target.HP >= target.stats[0]:
+            print(f'\n{target.name}s HP maxed out!')
+            target.HP = target.stats[0]
+        else:
+            print(f'\n{target.name} recovered {healingAmout[self.name]} HP!')
+
+
     def use(self, target=None, moveId=None):
-        if self.type == "HP/PP restore":
-            if self.name == "Potion":
-                healed = 20
-                target.HP += healed
-                if target.HP >= target.stats[0]:
-                    print(f'\n{target.name}s HP maxed out!')
-                    target.HP = target.stats[0]
-                else:
-                    print(f'\n{target.name} recovered {healed} HP!')
-            elif self.name == "Super potion":
-                healed = 50
-                target.HP += healed
-                if target.HP >= target.stats[0]:
-                    print(f'\n{target.name}s HP maxed out!')
-                    target.HP = target.stats[0]
-                else:
-                    print(f'\n{target.name} recovered {healed} HP!')
-            elif self.name == "Hyper potion":
-                healed = 200
-                target.HP += healed
-                if target.HP >= target.stats[0]:
-                    print(f'\n{target.name}s HP maxed out!')
-                    target.HP = target.stats[0]
-                else:
-                    print(f'\n{target.name} recovered {healed} HP!')
-            elif self.name == "Max potion":
-                print(f'\n{target.name}s HP maxed out!')
-                target.HP = target.stats[0]
-            elif self.name == "Super potion":
-                healed = 50
-                target.HP += healed
-                if target.HP >= target.stats[0]:
-                    print(f'\n{target.name}s HP maxed out!')
-                    target.HP = target.stats[0]
-                else:
-                    print(f'\n{target.name} recovered {healed} HP!')
-            elif self.name == "Fresh water":
-                healed = 30
-                target.HP += healed
-                if target.HP >= target.stats[0]:
-                    print(f'\n{target.name}s HP maxed out!')
-                    target.HP = target.stats[0]
-                else:
-                    print(f'\n{target.name} recovered {healed} HP!')
-            elif self.name == "Soda pop":
-                healed = 50
-                target.HP += healed
-                if target.HP >= target.stats[0]:
-                    print(f'\n{target.name}s HP maxed out!')
-                    target.HP = target.stats[0]
-                else:
-                    print(f'\n{target.name} recovered {healed} HP!')
-            elif self.name == "Lemonade":
-                healed = 70
-                target.HP += healed
-                if target.HP >= target.stats[0]:
-                    print(f'\n{target.name}s HP maxed out!')
-                    target.HP = target.stats[0]
-                else:
-                    print(f'\n{target.name} recovered {healed} HP!')
-            elif self.name == "Full restore":
+        if self.type == 'HP/PP restore':
+            if self.name in healing:
+                self.heal(target)
+            if self.name == "Full restore":
                 print(f'\n{target.name} fully restored')
                 target.HP = target.stats[0]
                 target.status = ''

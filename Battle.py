@@ -23,8 +23,8 @@ def printHP(target: Pokemon):
         status = '|' + color.RED + target.status + color.END + '|'
     elif target.status == 'Paralyzed':
         status = '|' + color.YELLOW + target.status + color.END + '|'
-    elif target.status == 'Poisoned':
-        status = '|' + color.PURPLE + target.status + color.END + '|'
+    elif target.status in ['Poisoned', 'BPoisoned']:
+        status = '|' + color.PURPLE + 'Poisoned' + color.END + '|'
     elif target.status == 'Sleeping':
         status = '|' + color.BOLD + target.status + color.END + '|'
     elif target.status == 'Frozen':
@@ -137,8 +137,8 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
 
             for poke in filter(lambda x: x.status != 'Fainted', dU):
                 print('\n------------------------------------------')
-                print(f'{poke.name} got {poke.expCalc(poke, len(dU))} xp!')
-                poke.expGain(poke.expCalc(poke, len(dU)))
+                print(f'{poke.name} got {poke.expCalc(fNow, len(dU))} xp!')
+                poke.expGain(poke.expCalc(fNow, len(dU)))
                 print('------------------------------------------\n')
                 time.sleep(1)
             dU = {yNow}
@@ -248,8 +248,8 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
 
             for poke in filter(lambda x: x.status != 'Fainted', dU):
                 print('\n------------------------------------------')
-                print(f'{poke.name} got {poke.expCalc(poke, len(dU))} xp!')
-                poke.expGain(poke.expCalc(poke, len(dU)))
+                print(f'{poke.name} got {poke.expCalc(fNow, len(dU))} xp!')
+                poke.expGain(poke.expCalc(fNow, len(dU)))
                 print('------------------------------------------\n')
                 time.sleep(1)
             dU = {yNow}
@@ -360,7 +360,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
 
             if opt == "0":
                 print('------------------------------------------')
-                for i in range(4):
+                for i in range(len(yNow.moves)):
                     print(f'({i}) ', end=' ')
                     printMove(yNow, yNow.moves[i])
                 print('------------------------------------------\n')
@@ -515,15 +515,16 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                             if Items[chCat][chIt] == 0:
                                 Items[chCat].pop(chIt)
                     elif chIt.name in pprest:
-                        if chIt.name in ['Elixir', 'Max elixir'] and chPoke.pp == [move.pp for move in chPoke.moves]:
-                            print('\nThere is no effect\n')
-                            turn = False
-                            continue
-                        elif chIt.name in ['Elixir', 'Max elixir'] and chPoke.pp != [move.pp for move in chPoke.moves]:
-                            chIt.use(target=chPoke)
-                            Items[chCat][chIt] -= 1
-                            if Items[chCat][chIt] == 0:
-                                Items[chCat].pop(chIt)
+                        if chIt.name in ['Elixir', 'Max elixir']:
+                            if chPoke.pp == [move.pp for move in chPoke.moves]:
+                                print('\nThere is no effect\n')
+                                turn = False
+                                continue
+                            else:
+                                chIt.use(target=chPoke)
+                                Items[chCat][chIt] -= 1
+                                if Items[chCat][chIt] == 0:
+                                    Items[chCat].pop(chIt)
                         elif chIt.name in ['Ether', 'Max ether']:
                             print('\n' + color.BOLD + f'which move pp should be restored?' + color.END + '\n')
                             print('------------------------------------------')
@@ -584,7 +585,7 @@ def battle(YourTeam, FoesTeam, You, Foe, Items: dict):
                             if Items[chCat][chIt] == 0:
                                 Items[chCat].pop(chIt)
 
-                        elif chPoke.status == 'Poisoned' and chIt.name in poisonHeal:
+                        elif chPoke.status in ['Poisoned', 'BPoisoned'] and chIt.name in poisonHeal:
                             chIt.use(target=chPoke)
                             Items[chCat][chIt] -= 1
                             if Items[chCat][chIt] == 0:

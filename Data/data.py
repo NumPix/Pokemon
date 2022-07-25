@@ -55,6 +55,18 @@ expFormulas = [
 5 - Fluctuating
 """
 
+healingAmout = {
+    'Potion': 20,
+    'Super potion': 50,
+    'Hyper potion': 200,
+    'Max potion': 1000,
+    'Fresh water': 30,
+    'Soda pop': 50,
+    'Lemonade': 70,
+    'Moomoo milk': 100,
+    'Full restore': 1000
+}
+
 natureList = ["Hardy", "Lonely", "Adamant", "Naughty", "Brave",
               "Bold", "Docile", "Impish", "Lax", "Relaxed",
               "Modest", "Mild", "Bashful", "Rash", "Quiet",

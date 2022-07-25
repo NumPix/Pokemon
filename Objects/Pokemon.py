@@ -10,7 +10,7 @@ expTypes = json.loads(open("Data/Json/expType.json", 'r').read())
 
 class Pokemon:
     def __init__(self, name: str, moves: [str, str, str, str], gender: int, id: int,
-                 lvl: int = 1, item: Item = None, status: str = ''):
+                     lvl: int = 1, item: Item = None, status: str = ''):
         self.name = name
         self.gender = gender
         self.moves = moves
@@ -113,9 +113,13 @@ class Pokemon:
                     '\nHP: \t\t+{0} -> {6}\nAttack: \t+{1} -> {7}\nDefence: \t+{2} -> {8}\nSp.Attack: \t+{3} -> {9}\nSp.Defence: +{4} -> {10}\nSpeed: \t\t+{5} -> {11}'.format(
                         *deltaStats, *self.stats))
 
+    def lvlGain(self, num: int):
+        self.lvl = num
+        self.exp = [expFormulas[self.expType](self.lvl), expFormulas[self.expType](self.lvl + 1)]
+
     def expCalc(self, target, pokemonUsed) -> int:
-        return int(1.5 * target.lvl * int(baseXp[data[target.id - 1]['name']['english']]) / 5 / pokemonUsed * (
-                    ((2 * target.lvl + 10) / (target.lvl + self.lvl + 10)) ** 2.5))
+        return int((1.5 * target.lvl * int(baseXp[data[target.id - 1]['name']['english']]) / (5 * pokemonUsed))
+                   * (((2 * target.lvl + 10) / (target.lvl + self.lvl + 10)) ** 2.5))
 
     def attack(self, moveId, target):
         if self.pp[moveId] != 0:
@@ -132,7 +136,7 @@ class Pokemon:
             return
         if 'Electric' in self.type and status == 'Paralyzed':
             return
-        if 'Steel' in self.type and status == 'Poisoned':
+        if 'Steel' in self.type and status in ['Poisoned', 'BPoisoned']:
             return
         if self.status == '':
             self.status = status
@@ -144,3 +148,5 @@ class Pokemon:
                 print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is frozen solid!\n" + color.END)
             if self.status == 'Sleeping':
                 print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} felt asleep!\n" + color.END)
+            if self.status == 'BPoisoned':
+                print(color.BOLD + f"\n{data[self.id - 1]['name']['english']} is badly poisoned!\n" + color.END)

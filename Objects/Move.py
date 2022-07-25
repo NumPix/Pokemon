@@ -59,10 +59,10 @@ class Move:
             elif TypeMult < 1 and TypeMult != 0:
                 print(color.YELLOW + "its not very effective" + color.END)
 
-            damage = hit * int(burned * (((2 * user.lvl / 5 + 2) * self.power * (
+            damage = hit * int((((2 * user.lvl / 5 + 2) * self.power * ((
                 user.stats[1] if self.category == 0 else user.stats[3]) / (
                                      target.stats[2] if self.category == 0 else target.stats[
-                                         4]) / 50) + 2) * rand * STAB * critical * TypeMult)
+                                         4])) / 50) + 2) * rand * STAB * critical * TypeMult * burned)
             target.HP -= damage
 
             print(f"{data[target.id - 1]['name']['english']} got {damage} damage!")
