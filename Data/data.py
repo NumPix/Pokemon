@@ -55,7 +55,7 @@ expFormulas = [
 5 - Fluctuating
 """
 
-healingAmout = {
+healing_amount = {
     'Potion': 20,
     'Super potion': 50,
     'Hyper potion': 200,
@@ -74,8 +74,60 @@ natureList = ["Hardy", "Lonely", "Adamant", "Naughty", "Brave",
               "Timid", "Hasty", "Jolly", "Naive", "Serious"]
 
 healing = ['Potion', 'Super potion', 'Hyper potion', 'Max potion', 'Fresh water', 'Soda pop', 'Lemonade', 'Moomoo milk', 'Full restore']
-pprest = ['Ether', 'Max ether', 'Elixir', 'Max elixir']
-frozenHeal = ['Full heal', 'Full restore', 'Ice heal', 'Pumkin berry', 'Aspear berry', 'Lava cookie', 'Heal powder', 'Lum berry']
-burnHeal = ['Burn heal', 'Rawst berry', 'Full heal', 'Lava cookie', 'Full restore', 'Heal powder', 'Lum berry']
-paralysisHeal = ['Paralyze heal', 'Cheri berry', 'Full heal', 'Lava cookie','Full restore', 'Heal powder', 'Lum berry']
-poisonHeal = ['Antidote', 'Pecha berry', 'Full heal', 'Lava cookie','Full restore', 'Heal powder', 'Lum berry']
+pp_restore = ['Ether', 'Max ether', 'Elixir', 'Max elixir']
+frozen_heal = ['Full heal', 'Full restore', 'Ice heal', 'Pumkin berry', 'Aspear berry', 'Lava cookie', 'Heal powder', 'Lum berry']
+burn_heal = ['Burn heal', 'Rawst berry', 'Full heal', 'Lava cookie', 'Full restore', 'Heal powder', 'Lum berry']
+paralysis_heal = ['Paralyze heal', 'Cheri berry', 'Full heal', 'Lava cookie', 'Full restore', 'Heal powder', 'Lum berry']
+poison_heal = ['Antidote', 'Pecha berry', 'Full heal', 'Lava cookie', 'Full restore', 'Heal powder', 'Lum berry']
+
+poison_inflict_chances = {
+    "Cross poison": [1, 9],     # 10%
+    "Poison tail": [1, 9],      # 10%
+    "Sludge wave": [1, 9],      # 10%
+    "Gunk shot": [3, 7],        # 30%
+    "Poison jab": [3, 7],       # 30%
+    "Poison sting": [3, 7],     # 30%
+    "Sludge bomb": [3, 7],      # 30%
+    "Sludge": [3, 7],           # 30%
+    "Shell side arm": [2, 8],   # 20%
+    "Smog": [4, 6]              # 40%
+}
+
+paralysis_inflict_chances = {
+    "Nuzzle": [1, 0],           # 100%
+    "Zap cannon": [255, 1],     # ~99.6% (255/256)
+    "Body slam": [3, 7],        # 30%
+    "Bounce": [3, 7],           # 30%
+    "Discharge": [3, 7],        # 30%
+    "Dragon breath": [3, 7],    # 30%
+    "Force palm": [3, 7],       # 30%
+    "Freeze shock": [3, 7],     # 30%
+    "Lick": [3, 7],             # 30%
+    "Spark": [3, 7],            # 30%
+    "Thunder": [3, 7],          # 30%
+    "Bolt strike": [2, 8],      # 20%
+    "Thunderbolt": [1, 9],      # 10%
+    "Shadow bolt": [1, 9],      # 10%
+    "Thunder fang": [1, 9],     # 10%
+    "Thunder punch": [1, 9],    # 10%
+    "Thunder shock": [1, 9]     # 10%
+}
+
+burn_inflict_chances = {
+    "Inferno": [1, 0],          # 100%
+    "Lava plume": [3, 7],       # 30%
+    "Scald": [3, 7],            # 30%
+    "Steam eruption": [3, 7],   # 30%
+    "Searing shot": [3, 7],     # 30%
+    "Blue flare": [2, 8],       # 20%
+    "Blaze kick": [1, 9],       # 10%
+    "Ember": [1, 9],            # 10%
+    "Fire blast": [1, 9],       # 10%
+    "Fire fang": [1, 9],        # 10%
+    "Fire punch": [1, 9],       # 10%
+    "Flame wheel": [1, 9],      # 10%
+    "Flamethrower": [1, 9],     # 10%
+    "Flare blitz": [1, 9],      # 10%
+    "Heat wave": [1, 9],        # 10%
+    "Pyro ball": [1, 9],        # 10%
+}

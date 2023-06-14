@@ -1,5 +1,13 @@
+import os
+from dotenv import load_dotenv
+
 from Objects.color import color
 from Data.data import *
+
+load_dotenv(".env")
+
+TURN_SEPARATOR = os.getenv("TURN_SEPARATOR")
+
 
 class Item:
     def __init__(self, name, type: str, id: int):
@@ -14,13 +22,12 @@ class Item:
         self.id = id
 
     def heal(self, target):
-        target.HP += healingAmout[self.name]
+        target.HP += healing_amount[self.name]
         if target.HP >= target.stats[0]:
             print(f'\n{target.name}s HP maxed out!')
             target.HP = target.stats[0]
         else:
-            print(f'\n{target.name} recovered {healingAmout[self.name]} HP!')
-
+            print(f'\n{target.name} recovered {healing_amount[self.name]} HP!')
 
     def use(self, target=None, moveId=None):
         if self.type == 'HP/PP restore':
@@ -31,11 +38,11 @@ class Item:
                 target.HP = target.stats[0]
                 target.status = ''
             elif self.name == "Elixir":
-                maxpp = [move.pp for move in target.moves]
+                max_pp = [move.pp for move in target.moves]
                 for mv in range(4):
                     target.pp[mv] += 10
-                    if target.pp[mv] > maxpp[mv]:
-                        target.pp[mv] = maxpp[mv]
+                    if target.pp[mv] > max_pp[mv]:
+                        target.pp[mv] = max_pp[mv]
                 if target.pp == [move.pp for move in target.moves]:
                     print(f'\n{target.name}s pp were fully restored')
                 else:
@@ -77,4 +84,4 @@ class Item:
             pass
         else:
             return
-        print("\n==========================================\n")
+        print(f"\n{TURN_SEPARATOR}\n")

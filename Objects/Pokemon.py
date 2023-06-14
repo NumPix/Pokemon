@@ -82,24 +82,24 @@ class Pokemon:
                 0.01 * (2 * self.baseStats[0] + self.iv[0] + m.floor(0.25 * self.ev[0])) * self.lvl) + self.lvl + 5,
 
                                    m.floor((
-                                                   0.01 * ((2 * self.baseStats[1] + self.iv[1] + m.floor(
-                                               0.25 * self.ev[1])) * self.lvl) + 5) * self.natureStat[0]),
+                                                   .01 * ((2 * self.baseStats[1] + self.iv[1] + m.floor(
+                                               .25 * self.ev[1])) * self.lvl) + 5) * self.natureStat[0]),
 
                                    m.floor((
-                                                   0.01 * ((2 * self.baseStats[2] + self.iv[1] + m.floor(
-                                               0.25 * self.ev[2])) * self.lvl) + 5) * self.natureStat[1]),
+                                                   .01 * ((2 * self.baseStats[2] + self.iv[1] + m.floor(
+                                               .25 * self.ev[2])) * self.lvl) + 5) * self.natureStat[1]),
 
                                    m.floor((
-                                                   0.01 * ((2 * self.baseStats[3] + self.iv[1] + m.floor(
-                                               0.25 * self.ev[3])) * self.lvl) + 5) * self.natureStat[2]),
+                                                   .01 * ((2 * self.baseStats[3] + self.iv[1] + m.floor(
+                                               .25 * self.ev[3])) * self.lvl) + 5) * self.natureStat[2]),
 
                                    m.floor((
-                                                   0.01 * ((2 * self.baseStats[4] + self.iv[2] + m.floor(
-                                               0.25 * self.ev[4])) * self.lvl) + 5) * self.natureStat[3]),
+                                                   .01 * ((2 * self.baseStats[4] + self.iv[2] + m.floor(
+                                               .25 * self.ev[4])) * self.lvl) + 5) * self.natureStat[3]),
 
                                    m.floor((
-                                                   0.01 * ((2 * self.baseStats[5] + self.iv[1] + m.floor(
-                                               0.25 * self.ev[5])) * self.lvl) + 5) * self.natureStat[4]),
+                                                   .01 * ((2 * self.baseStats[5] + self.iv[1] + m.floor(
+                                               .25 * self.ev[5])) * self.lvl) + 5) * self.natureStat[4]),
                                    ])
 
             deltaStats = self.stats - tempStats
@@ -109,9 +109,13 @@ class Pokemon:
             self.expGain(num - tempExp, prt)
             if temp < self.lvl and prt:
                 print(color.BOLD + f'{self.name} grew to lvl {self.lvl}!' + color.END)
-                print(
-                    '\nHP: \t\t+{0} -> {6}\nAttack: \t+{1} -> {7}\nDefence: \t+{2} -> {8}\nSp.Attack: \t+{3} -> {9}\nSp.Defence: +{4} -> {10}\nSpeed: \t\t+{5} -> {11}'.format(
-                        *deltaStats, *self.stats))
+                print('\nHP: \t\t+{0} -> {6}\n'
+                      'Attack: \t+{1} -> {7}\n'
+                      'Defence: \t+{2} -> {8}\n'
+                      'Sp.Attack: \t+{3} -> {9}\n'
+                      'Sp.Defence: +{4} -> {10}\n'
+                      'Speed: \t\t+{5} -> {11}'
+                      .format(*deltaStats, *self.stats))
 
     def lvlGain(self, num: int):
         self.lvl = num
